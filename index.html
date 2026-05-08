@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>bytefort.xyz — Ayussh's Digital Fortress</title>
-  <meta name="description" content="bytefort.xyz — Personal homelab, AI lab, self-hosted services, and networking experiments. 10 active services running 24/7 on bare metal." />
+  <title>bytefort.xyz — Digital Fortress</title>
+  <meta name="description" content="bytefort.xyz — Personal homelab, AI lab, self-hosted services, and networking experiments. 10+ active services running 24/7 on bare metal." />
   <meta property="og:title" content="bytefort.xyz — Digital Fortress" />
   <meta property="og:description" content="Homelab. AI lab. Networks. Self-hosted everything." />
   <meta property="og:type" content="website" />
@@ -102,7 +102,7 @@
   <div class="hero-content">
     <div class="hero-eyebrow">
       <span class="blink-dot"></span>
-      <span class="mono">// SYSTEM ACTIVE // 2025</span>
+      <span class="mono">// SYSTEM ACTIVE // 2026</span>
     </div>
 
     <h1 class="hero-name">
@@ -186,10 +186,10 @@
         <div class="boot-sys-stats" id="bootStats">
           <div class="bss-row">
             <div class="bss-item"><span class="bss-k mono">HOSTNAME</span><span class="bss-v mono">bytefort.xyz</span></div>
-            <div class="bss-item"><span class="bss-k mono">KERNEL</span><span class="bss-v mono">ESXi 8.0</span></div>
+            <div class="bss-item"><span class="bss-k mono">KERNEL</span><span class="bss-v mono">ESXi 6.5</span></div>
           </div>
           <div class="bss-row">
-            <div class="bss-item"><span class="bss-k mono">SERVICES</span><span class="bss-v mono green">10 / 10 ONLINE</span></div>
+            <div class="bss-item"><span class="bss-k mono">SERVICES</span><span class="bss-v mono green">10+ ONLINE</span></div>
             <div class="bss-item"><span class="bss-k mono">UPTIME</span><span class="bss-v mono green">99.9%</span></div>
           </div>
         </div>
@@ -217,21 +217,21 @@
         <div class="hl-stage" id="hlStage0">
           <div class="hl-stage-num mono">01</div>
           <h3 class="hl-stage-title">The Machine</h3>
-          <p class="hl-stage-desc">Bare metal hardware running 24/7. Intel Xeon processor, 32GB ECC RAM, NVMe + HDD storage. Owned outright, no rental, no cloud.</p>
+          <p class="hl-stage-desc">Bare metal hardware running 24/7. Dual Intel Xeon processors, 64GB DDR3 ECC RAM, NVMe + HDD storage. Owned outright, no rental, no cloud.</p>
           <div class="hl-tags">
-            <span class="hl-tag mono">Intel Xeon E3</span>
-            <span class="hl-tag mono">32GB DDR4</span>
-            <span class="hl-tag mono">ZFS Storage</span>
+            <span class="hl-tag mono">Intel Xeon E5</span>
+            <span class="hl-tag mono">64GB DDR3 ECC</span>
+            <span class="hl-tag mono">VMFS Storage</span>
           </div>
         </div>
 
         <div class="hl-stage" id="hlStage1">
           <div class="hl-stage-num mono">02</div>
           <h3 class="hl-stage-title">Virtualization</h3>
-          <p class="hl-stage-desc">VMware ESXi Type-1 hypervisor slices the hardware into isolated VMs. Ubuntu servers, Docker hosts, dedicated DNS — each perfectly contained.</p>
+          <p class="hl-stage-desc">VMware ESXi Type-1 hypervisor slices the hardware into isolated VMs. Ubuntu servers and Docker hosts — each perfectly contained.</p>
           <div class="hl-tags">
-            <span class="hl-tag mono">VMware ESXi 8.0</span>
-            <span class="hl-tag mono">4 VMs Active</span>
+            <span class="hl-tag mono">VMware ESXi 6.5</span>
+            <span class="hl-tag mono">2 VMs Active</span>
             <span class="hl-tag mono">Docker</span>
           </div>
         </div>
@@ -250,9 +250,9 @@
         <div class="hl-stage" id="hlStage3">
           <div class="hl-stage-num mono">04</div>
           <h3 class="hl-stage-title">The Arsenal</h3>
-          <p class="hl-stage-desc">10 active services — media stack, infrastructure tools, web terminals, dashboards. All self-hosted, all under my control. No subscriptions, no data sharing.</p>
+          <p class="hl-stage-desc">10+ active services — media stack, infrastructure tools, web terminals, dashboards. All self-hosted, all under my control. No subscriptions, no data sharing.</p>
           <div class="hl-tags">
-            <span class="hl-tag mono">10 Services</span>
+            <span class="hl-tag mono">10+ Services</span>
             <span class="hl-tag mono">No Subscriptions</span>
             <span class="hl-tag mono">Full Control</span>
           </div>
@@ -280,12 +280,12 @@
             <div class="hw-block">
               <div class="hw-icon">💾</div>
               <div class="hw-name mono">NVMe</div>
-              <div class="hw-val mono">1TB SSD</div>
+              <div class="hw-val mono">930GB SSD</div>
             </div>
             <div class="hw-block">
               <div class="hw-icon">🗄</div>
               <div class="hw-name mono">HDD</div>
-              <div class="hw-val mono">8TB ZFS</div>
+              <div class="hw-val mono">4.8TB VMFS</div>
             </div>
           </div>
           <div class="hl-status-bar">
@@ -299,16 +299,14 @@
         <div class="hl-panel" id="hlPanel1">
           <div class="hl-panel-header mono">VIRTUALIZATION LAYER</div>
           <div class="hl-vm-tree mono">
-            <div class="vm-root">VMware ESXi 8.0 <span class="green">[HYPERVISOR]</span></div>
+            <div class="vm-root">VMware ESXi 6.5 <span class="green">[HYPERVISOR]</span></div>
             <div class="vm-branch">├── ubuntu-server-01 <span class="cyan">[VM]</span></div>
-            <div class="vm-branch">├── docker-host      <span class="cyan">[VM]</span></div>
-            <div class="vm-branch">├── dns-server       <span class="cyan">[VM]</span></div>
-            <div class="vm-branch">└── dev-machine      <span class="cyan">[VM]</span></div>
+            <div class="vm-branch">└── ubuntu-r720      <span class="cyan">[VM]</span></div>
           </div>
           <div class="hl-status-bar">
             <span class="mono">VMs ONLINE</span>
             <div class="status-fill"><div class="status-fill-inner" style="width:100%"></div></div>
-            <span class="mono green">4 / 4</span>
+            <span class="mono green">2 / 2</span>
           </div>
         </div>
 
@@ -343,7 +341,7 @@
 
         <!-- Stage 3: services -->
         <div class="hl-panel" id="hlPanel3">
-          <div class="hl-panel-header mono">SERVICES LAYER <span class="green">[ 10 / 10 ONLINE ]</span></div>
+          <div class="hl-panel-header mono">SERVICES LAYER <span class="green">[ 10+ ONLINE ]</span></div>
           <div class="hl-svc-grid">
             <div class="hl-svc green-dot mono">● Dashboard</div>
             <div class="hl-svc green-dot mono">● Jellyfin</div>
@@ -606,11 +604,11 @@
       <div class="tlm-card" data-metric="disk">
         <div class="tlm-head">
           <span class="tlm-label mono">STORAGE</span>
-          <span class="tlm-pill mono">ZFS</span>
+          <span class="tlm-pill mono">VMFS</span>
         </div>
         <div class="tlm-big mono"><span data-tlm-val>2.8</span><span class="tlm-unit">TB</span></div>
-        <div class="tlm-bar"><div class="tlm-bar-fill" data-tlm-fill style="width:35%; background: linear-gradient(90deg, var(--cyan), var(--purple));"></div></div>
-        <div class="tlm-sub mono" id="tlmDiskSub">2.8 / 8 TB used · 1.9× compression</div>
+        <div class="tlm-bar"><div class="tlm-bar-fill" data-tlm-fill style="width:58%; background: linear-gradient(90deg, var(--cyan), var(--purple));"></div></div>
+        <div class="tlm-sub mono" id="tlmDiskSub">2.8 / 4.8 TB used</div>
       </div>
 
       <!-- Temp -->
@@ -665,51 +663,51 @@
 
       <div class="tl-item reveal-up">
         <div class="tl-dot"></div>
-        <div class="tl-meta mono"><span class="tl-date">2024 · JAN</span><span class="tl-tag">v0.1 · genesis</span></div>
-        <h3 class="tl-title">First boot</h3>
-        <p class="tl-desc">Bought a used Dell T130 off marketplace for 12k INR. Installed Ubuntu Server, configured static IP, pinged it from across the room. Hooked.</p>
+        <div class="tl-meta mono"><span class="tl-date">2024 · MAR</span><span class="tl-tag">v0.1 · genesis</span></div>
+        <h3 class="tl-title">First NAS, first server</h3>
+        <p class="tl-desc">Grabbed some cheap used hardware and threw Ubuntu Server on it. Set up a basic NAS and got Jellyfin running. Ugly setup, barely worked — but it was mine.</p>
       </div>
 
       <div class="tl-item reveal-up">
         <div class="tl-dot"></div>
-        <div class="tl-meta mono"><span class="tl-date">2024 · MAR</span><span class="tl-tag">v0.4 · media</span></div>
+        <div class="tl-meta mono"><span class="tl-date">2024 · APR</span><span class="tl-tag">v0.3 · media</span></div>
         <h3 class="tl-title">Jellyfin goes live</h3>
-        <p class="tl-desc">First service exposed publicly via Cloudflare Tunnel. Streamed a 4K movie to my phone on mobile data. Felt like magic.</p>
+        <p class="tl-desc">Got Cloudflare Tunnel working and exposed Jellyfin publicly. Streamed a movie to my phone on mobile data from a server sitting on my desk. Couldn't believe it actually worked.</p>
       </div>
 
       <div class="tl-item reveal-up">
         <div class="tl-dot"></div>
-        <div class="tl-meta mono"><span class="tl-date">2024 · JUL</span><span class="tl-tag">v1.0 · esxi</span></div>
-        <h3 class="tl-title">Reformat — going Type-1</h3>
-        <p class="tl-desc">Wiped Ubuntu, installed VMware ESXi 8.0. Migrated everything into VMs. Lost 4 hours of sleep, gained proper isolation.</p>
+        <div class="tl-meta mono"><span class="tl-date">2024 · JUN</span><span class="tl-tag">hiatus</span></div>
+        <h3 class="tl-title">Took a break</h3>
+        <p class="tl-desc">Life got busy. The server sat collecting dust for a few months. Came back to it occasionally but nothing serious. Sometimes you just need to step away.</p>
       </div>
 
       <div class="tl-item reveal-up">
         <div class="tl-dot"></div>
-        <div class="tl-meta mono"><span class="tl-date">2024 · OCT</span><span class="tl-tag">v1.4 · *arr</span></div>
-        <h3 class="tl-title">The *arr stack</h3>
-        <p class="tl-desc">Radarr + Sonarr + Prowlarr + Jellyseerr. The full automated pipeline. Request a movie on a phone, watch it 20 minutes later.</p>
+        <div class="tl-meta mono"><span class="tl-date">2024 · DEC</span><span class="tl-tag">v1.0 · r720</span></div>
+        <h3 class="tl-title">The Dell PowerEdge R720</h3>
+        <p class="tl-desc">Found a Dell PowerEdge R720 for a good price. Dual Xeon, 64GB DDR3 ECC, the real deal. This thing is loud and heavy and I love it.</p>
       </div>
 
       <div class="tl-item reveal-up">
         <div class="tl-dot"></div>
-        <div class="tl-meta mono"><span class="tl-date">2025 · FEB</span><span class="tl-tag">v2.0 · zfs</span></div>
-        <h3 class="tl-title">8TB ZFS pool</h3>
-        <p class="tl-desc">Added an 8TB drive, set up ZFS with compression and snapshots. First successful rollback after a bad <span class="mono">rm -rf</span> saved me.</p>
+        <div class="tl-meta mono"><span class="tl-date">2025 · JAN</span><span class="tl-tag">v1.2 · esxi</span></div>
+        <h3 class="tl-title">ESXi 6.5 — going Type-1</h3>
+        <p class="tl-desc">Installed VMware ESXi 6.5 on the R720. Spun up two Ubuntu VMs and moved everything into Docker. Proper isolation, clean architecture. Spent a weekend getting it right.</p>
       </div>
 
       <div class="tl-item reveal-up">
         <div class="tl-dot"></div>
-        <div class="tl-meta mono"><span class="tl-date">2025 · JUN</span><span class="tl-tag">v2.4 · ai</span></div>
-        <h3 class="tl-title">Local LLMs</h3>
-        <p class="tl-desc">Spun up Ollama, ran LLaMA 3 on bare metal. ~14 tok/s on CPU. Slow, but private. Started writing the AI lab section.</p>
+        <div class="tl-meta mono"><span class="tl-date">2025 · MAR</span><span class="tl-tag">v1.8 · *arr</span></div>
+        <h3 class="tl-title">The full media stack</h3>
+        <p class="tl-desc">Radarr + Sonarr + Prowlarr + Jellyseerr + qBittorrent. The whole automated pipeline. Request a movie, it shows up in Jellyfin 20 minutes later. Friends started using it.</p>
       </div>
 
       <div class="tl-item reveal-up">
         <div class="tl-dot"></div>
-        <div class="tl-meta mono"><span class="tl-date">2026 · NOW</span><span class="tl-tag">v3.0 · live</span></div>
-        <h3 class="tl-title">10 services. 99.9% uptime.</h3>
-        <p class="tl-desc">Where we are today. Custom dashboard, monitored every metric, zero incidents this quarter. Next: GPU passthrough, k3s cluster, observability.</p>
+        <div class="tl-meta mono"><span class="tl-date">2026 · NOW</span><span class="tl-tag">v2.0 · live</span></div>
+        <h3 class="tl-title">Monitoring + this website</h3>
+        <p class="tl-desc">Added a dashboard and wired up live telemetry. Then built this site to document the whole thing. 10+ services running, zero cloud. Still adding stuff.</p>
       </div>
     </div>
   </div>
@@ -818,8 +816,8 @@
 
       <div class="infra-card reveal-up">
         <div class="ic-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
-        <h3>ZFS Storage</h3>
-        <p>Copy-on-write filesystem with data integrity checksums, compression, and instant snapshots.</p>
+        <h3>VMFS Storage</h3>
+        <p>VMware's clustered filesystem managing virtual machine disk images with reliable block-level storage.</p>
       </div>
     </div>
 
@@ -848,7 +846,7 @@
     <h2 class="cta-heading">
       The fortress<br>is <span class="glitch" data-text="always">always</span> online.
     </h2>
-    <p class="cta-desc">10 services. Zero cloud. Built from scratch.<br>This is just the beginning.</p>
+    <p class="cta-desc">10+ services. Zero cloud. Built from scratch.<br>This is just the beginning.</p>
     <div class="cta-stats">
       <div class="cta-stat"><span class="cta-stat-n mono" data-count="10">0</span><span class="cta-stat-l mono">Services</span></div>
       <div class="cta-stat"><span class="cta-stat-n mono" data-count="99">0</span><span class="cta-stat-l mono">% Uptime</span></div>
@@ -869,7 +867,7 @@
       <span class="mono">All systems operational</span>
     </div>
     <div class="footer-meta">
-      <span class="mono footer-copy">© 2025 bytefort.xyz</span>
+      <span class="mono footer-copy">© 2026 bytefort.xyz</span>
       <span class="mono footer-build">// running on bare metal</span>
     </div>
   </div>

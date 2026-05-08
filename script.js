@@ -75,7 +75,7 @@
 (function () {
   const el = document.getElementById('uptimeDays');
   if (!el) return;
-  const since = new Date('2024-01-15');
+  const since = new Date('2024-03-01');
   el.textContent = Math.floor((Date.now() - since) / 86400000);
 })();
 
