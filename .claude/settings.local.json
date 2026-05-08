@@ -16,7 +16,10 @@
       "Bash(tar -tf -)",
       "Bash(grep -v '^$')",
       "Bash(tar -xOf - website/project/styles.css)",
-      "Bash(tar -xOf - website/project/script.js)"
+      "Bash(tar -xOf - website/project/script.js)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
     ]
   }
 }
