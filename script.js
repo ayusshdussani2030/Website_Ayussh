@@ -100,10 +100,10 @@
   let timer;
   cmd.addEventListener('click', async () => {
     try {
-      await navigator.clipboard.writeText('ssh ayussh@bytefort.xyz');
+      await navigator.clipboard.writeText('ping bytefort.xyz');
       showToast('COPIED TO CLIPBOARD');
     } catch {
-      showToast('ssh ayussh@bytefort.xyz');
+      showToast('ping bytefort.xyz');
     }
   });
 
