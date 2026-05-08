@@ -566,6 +566,8 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 .tw-title {
   font-size: 0.7rem; color: var(--text-dim);
   letter-spacing: 0.04em; flex: 1; text-align: center;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .tw-body {
@@ -1289,7 +1291,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   .hl-left {
     padding: 3rem var(--pad-x) 1.5rem;
     border-right: none; border-bottom: 1px solid var(--line);
-    max-height: 42vh; overflow: hidden;
+    max-height: 45vh; overflow: auto;
   }
   .hl-right { padding: 1.5rem var(--pad-x) 3rem; }
   .hl-panel { max-height: 50vh; overflow: auto; }
@@ -1311,18 +1313,63 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   .df-line { min-width: 15px; max-width: 30px; }
   .hero-stats { padding: 0.5rem 0.75rem; }
   .hs-item { padding: 0.5rem 1rem; }
+
+  /* Filter bar: horizontal scroll instead of wrap */
+  .filter-bar {
+    width: 100%; overflow-x: auto; flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .filter-btn { flex-shrink: 0; }
+
+  /* Boot stats: wrap on narrow screens */
+  .bss-row { flex-wrap: wrap; gap: 1.25rem; }
+
+  /* Network flow: wrap gracefully inside homelab panel */
+  .nf-node { min-width: 66px; padding: 0.5rem 0.6rem; font-size: 0.65rem; }
+  .nf-arrow { min-width: 12px; max-width: 28px; }
+
+  /* Homelab stage min-height so content isn't clipped */
+  .hl-stages { min-height: 180px; }
+
+  /* Section headings: tighten letter spacing on mobile */
+  .section-heading { letter-spacing: -0.03em; }
+
+  /* Timeline: tighten gaps on mobile */
+  .tl-item { padding-bottom: 2rem; }
 }
 
 @media (max-width: 520px) {
   .hero-stats { gap: 0.5rem; }
   .hs-sep { display: none; }
+  .hs-item { padding: 0.5rem 0.65rem; }
   .hero-actions { flex-direction: column; width: 100%; }
   .btn-cyber, .btn-outline-cyber { width: 100%; justify-content: center; }
   .services-grid { grid-template-columns: 1fr; }
   .ai-grid { grid-template-columns: 1fr; }
   .cta-stats { gap: 0; }
-  .cta-stat { padding: 0 1.25rem; }
+  .cta-stat { padding: 0 1rem; }
   .cta-ring.r3, .cta-ring.r4 { display: none; }
+
+  /* Terminal header: smaller text on tiny screens */
+  .tw-title { font-size: 0.6rem; letter-spacing: 0.02em; }
+
+  /* Boot sys stats: single column on tiny screens */
+  .bss-row { flex-direction: column; gap: 0.85rem; }
+
+  /* Homelab: reduce padding so both panels fit in 100vh */
+  .hl-left { padding: 1.75rem var(--pad-x) 1rem; max-height: 40vh; }
+  .hl-right { padding: 1rem var(--pad-x) 1.75rem; }
+  .hl-panel { max-height: 55vh; }
+  .hl-heading { font-size: 1.8rem; margin-bottom: 1.5rem; }
+
+  /* Network section data flow */
+  .df-node { padding: 0.5rem 0.75rem; font-size: 0.68rem; }
+
+  /* CTA section */
+  .cta-heading { letter-spacing: -0.035em; }
+  .cta-cmd { font-size: 0.68rem; }
 }
 
 /* ============================================================
@@ -1346,7 +1393,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 .bi-inner {
   position: relative; z-index: 1;
   display: flex; flex-direction: column; align-items: center;
-  gap: 1.25rem; width: clamp(260px, 38vw, 440px);
+  gap: 1.25rem; width: clamp(280px, 85vw, 440px);
 }
 .bi-logo {
   font-family: var(--mono);
