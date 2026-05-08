@@ -1293,9 +1293,9 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
     border-right: none; border-bottom: 1px solid var(--line);
     max-height: 45vh; overflow: auto;
   }
-  .hl-right { padding: 1.5rem var(--pad-x) 3rem; }
+  .hl-right { padding: 1.5rem var(--pad-x) 3rem; flex: 1; display: flex; align-items: stretch; }
+  .hl-diagram { aspect-ratio: auto; width: 100%; max-width: 100%; min-height: 320px; height: 100%; }
   .hl-panel { max-height: 50vh; overflow: auto; }
-  .hl-diagram { aspect-ratio: auto; }
 }
 
 @media (max-width: 768px) {
