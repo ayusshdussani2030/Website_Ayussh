@@ -387,7 +387,7 @@
 
   const LINES = [
     { cls: 'ok',   text: '[ OK ] Initializing kernel modules...' },
-    { cls: 'ok',   text: '[ OK ] VMware ESXi 8.0 hypervisor loaded' },
+    { cls: 'ok',   text: '[ OK ] VMware ESXi 6.5 hypervisor loaded' },
     { cls: 'ok',   text: '[ OK ] Network interface eth0: ACTIVE' },
     { cls: 'ok',   text: '[ OK ] Cloudflare Zero Trust tunnel: CONNECTED' },
     { cls: 'ok',   text: '[ OK ] ZFS storage pool: 8.0 TiB available' },
