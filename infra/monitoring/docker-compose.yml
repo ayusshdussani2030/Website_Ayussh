@@ -1,0 +1,52 @@
+services:
+
+  vmware-exporter:
+    image: pryorda/vmware_exporter:latest
+    container_name: vmware-exporter
+    restart: unless-stopped
+    environment:
+      VSPHERE_HOST: "${ESXI_HOST}"          # e.g. 192.168.1.10
+      VSPHERE_USER: "${ESXI_USER}"          # e.g. root
+      VSPHERE_PASSWORD: "${ESXI_PASSWORD}"
+      VSPHERE_IGNORE_SSL: "true"
+    ports:
+      - "9272:9272"
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.retention.time=30d"
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    restart: unless-stopped
+    environment:
+      GF_SERVER_ROOT_URL: "https://grafana.bytefort.xyz"
+      GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_ADMIN_PASSWORD}"
+      # SMTP — fill in after generating a Gmail App Password
+      GF_SMTP_ENABLED: "true"
+      GF_SMTP_HOST: "smtp.gmail.com:587"
+      GF_SMTP_USER: "${GMAIL_ADDRESS}"
+      GF_SMTP_PASSWORD: "${GMAIL_APP_PASSWORD}"
+      GF_SMTP_FROM_ADDRESS: "${GMAIL_ADDRESS}"
+      GF_SMTP_FROM_NAME: "bytefort.xyz alerts"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./provisioning:/etc/grafana/provisioning:ro
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+
+volumes:
+  prometheus_data:
+  grafana_data:

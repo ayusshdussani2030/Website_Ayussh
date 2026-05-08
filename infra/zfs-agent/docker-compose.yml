@@ -1,0 +1,13 @@
+services:
+  zfs-agent:
+    build: .
+    container_name: zfs-agent
+    restart: unless-stopped
+    network_mode: host      # needs host networking to call zpool on the real kernel
+    environment:
+      ZFS_POOL: datastore   # change to your actual pool name
+    volumes:
+      - /sbin/zpool:/sbin/zpool:ro
+      - /sbin/zfs:/sbin/zfs:ro
+      - /dev/zfs:/dev/zfs    # ZFS device node
+    # Note: run on ubuntu-server-01 (where the ZFS pool lives), not docker-host

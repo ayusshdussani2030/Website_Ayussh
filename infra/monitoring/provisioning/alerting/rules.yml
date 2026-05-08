@@ -1,0 +1,123 @@
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: bytefort_alerts
+    folder: bytefort
+    interval: 1m
+    rules:
+
+      - uid: cpu_high
+        title: "CPU usage > 85% for 5 min"
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            model:
+              expr: 100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+          - refId: C
+            datasourceUid: "__expr__"
+            model:
+              type: threshold
+              conditions:
+                - evaluator: { params: [85], type: gt }
+                  query: { params: [A] }
+        noDataState: OK
+        execErrState: Error
+        for: 5m
+        annotations:
+          summary: "CPU is {{ $values.A.Value | printf \"%.1f\" }}% on {{ $labels.instance }}"
+        labels:
+          severity: warning
+
+      - uid: mem_high
+        title: "RAM usage > 90%"
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            model:
+              expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100
+          - refId: C
+            datasourceUid: "__expr__"
+            model:
+              type: threshold
+              conditions:
+                - evaluator: { params: [90], type: gt }
+                  query: { params: [A] }
+        noDataState: OK
+        execErrState: Error
+        for: 2m
+        annotations:
+          summary: "RAM is {{ $values.A.Value | printf \"%.1f\" }}% on {{ $labels.instance }}"
+        labels:
+          severity: warning
+
+      - uid: temp_high
+        title: "CPU temp > 70°C"
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            model:
+              expr: node_hwmon_temp_celsius{chip=~".*coretemp.*"}
+          - refId: C
+            datasourceUid: "__expr__"
+            model:
+              type: threshold
+              conditions:
+                - evaluator: { params: [70], type: gt }
+                  query: { params: [A] }
+        noDataState: OK
+        execErrState: Error
+        for: 1m
+        annotations:
+          summary: "CPU temp is {{ $values.A.Value }}°C on {{ $labels.instance }}"
+        labels:
+          severity: critical
+
+      - uid: disk_high
+        title: "Disk usage > 80%"
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            model:
+              expr: (1 - (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"})) * 100
+          - refId: C
+            datasourceUid: "__expr__"
+            model:
+              type: threshold
+              conditions:
+                - evaluator: { params: [80], type: gt }
+                  query: { params: [A] }
+        noDataState: OK
+        execErrState: Error
+        for: 5m
+        annotations:
+          summary: "Disk is {{ $values.A.Value | printf \"%.1f\" }}% full on {{ $labels.instance }}"
+        labels:
+          severity: warning
+
+      - uid: vm_down
+        title: "VM offline"
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            model:
+              expr: up{job=~"node_.*"}
+          - refId: C
+            datasourceUid: "__expr__"
+            model:
+              type: threshold
+              conditions:
+                - evaluator: { params: [1], type: lt }
+                  query: { params: [A] }
+        noDataState: Alerting
+        execErrState: Error
+        for: 2m
+        annotations:
+          summary: "VM {{ $labels.instance }} is unreachable"
+        labels:
+          severity: critical

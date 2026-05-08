@@ -1,0 +1,102 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Dev server
+
+```bash
+npx serve -p 3000 .
+```
+
+No build step, no bundler, no compilation. Files are served as-is.
+
+## Architecture
+
+**Pure static site** — five files, no framework, no dependencies beyond Google Fonts.
+
+| File | Role |
+|------|------|
+| `index.html` | All markup and content. Single-page, anchor-based routing: `#hero` `#boot` `#homelab` `#services` `#telemetry` `#timeline` `#ailab` `#network` `#cta`. |
+| `styles.css` | All styling (~1753 lines). CSS custom properties in `:root` — change design tokens there first. No preprocessor. |
+| `script.js` | Self-contained IIFEs (see below). |
+| `favicon.svg` | SVG favicon — dark rounded square with `bf` in green. |
+
+## Design system
+
+All colors, spacing, and motion are CSS variables in `:root` at the top of `styles.css`.
+
+Primary accents: `--cyan: #67e8f9` (primary), `--green: #4ade80` (status only), `--pink: #f472b6` (glitch only), `--purple: #c4b5fd` (AI section only), `--amber: #fcd34d` (warnings).  
+Backgrounds: `--bg #05070b` → `--bg-4 #1a2030` (four levels, named `--bg-1` through `--bg-4`). Legacy aliases `--bg2/3/4` exist for backwards compat.  
+Line/border tokens: `--line`, `--line-mid`, `--line-strong` (replaces old `--border` family).  
+Category colors for service cards: `--cat-media: #c4b5fd`, `--cat-infrastructure: #67e8f9`, `--cat-network: #4ade80`.
+
+Service card category theming uses `:has([data-cat="..."])` to set `--cat-color` per card — no per-card class needed.
+
+## script.js — IIFEs in order
+
+0. **Boot intro overlay** — fills `#biBar` and cycles status text over 1.7s via rAF, then fades `.boot-intro` out and removes it.
+0b. **Custom cursor** — dot (`#curDot`) follows mouse exactly; ring (`#curRing`) lerps behind via a continuous rAF loop at 0.18 factor. Adds `.hover` class to ring over `a/button/.svc-card`. Only activates when `(hover: hover) and (pointer: fine)` matches.
+0c. **Live uptime counter** — sets `#uptimeDays` to days elapsed since `2024-01-15`.
+0d. **Scroll to top** — shows `#toTop` after 700px scroll; smooth-scrolls to top on click.
+0e. **Clipboard copy** — clicking `#sshCmd` writes `ssh ayussh@bytefort.xyz` to clipboard; shows `#toast` for 2.2s with fallback text on clipboard API failure.
+0f. **Text scramble** — on intersection of `.section-tag` elements, scrambles characters via rAF using `CHARS = '!<>-_\\/[]{}=+*^?#@~01'` before resolving to real text. No-ops on `prefers-reduced-motion`.
+0g. **Click ripple** — disabled in current version.
+1. **Scroll progress bar** — updates `#progressBar` width% on scroll.
+2. **Mouse glow** — moves `#mouseGlow` (fixed radial gradient) via `transform` to follow the cursor.
+3. **Hero canvas** — 85-particle network on `#heroCanvas`; mouse repels nearby particles.
+4. **Typing animation** — types/deletes rotating role strings into `#typedText`.
+5. **Animated counters** — `IntersectionObserver` on `[data-count]` elements; ease-out-cubic 0→target.
+6. **Navbar** — scroll-state class on `#navbar`, active link tracking across sections, hamburger toggle for `#mobileMenu`.
+7. **Boot scroll driver** — scroll progress through the 380vh `#boot` section appends terminal lines into `#bootTerminal` (incremental, not full rebuild), fills `#bootBar`, shows `#bootStats` at 98%.
+8. **Homelab scroll driver** — scroll progress through the 480vh `#homelab` section switches `.active` between four `.hl-stage` / `.hl-panel` pairs (`#hlStage0–3`, `#hlPanel0–3`).
+9. **Scroll reveal** — `IntersectionObserver` adds `.visible` to `.reveal-up` elements (stagger: 60ms × index % 6).
+10. **3D card hover** — `mousemove` on `.svc-card` applies `perspective(800px) rotateX/Y`.
+11. **Service filter** — `.filter-btn[data-filter]` toggles `.hidden` on `.svc-card[data-category]`.
+12. **Live telemetry** — `IntersectionObserver` starts on `#telemetry`; simulates CPU/mem/net/temp/req metrics with drift. Updates every 2.2s. Draws sparklines via SVG path generation. Tails a fake log into `#tlmLog` every 1.4s. All animation skipped on `prefers-reduced-motion`.
+
+## Sticky scroll sections
+
+Both sticky sections use the same pattern: tall outer wrapper holds scroll distance; `position: sticky` inner panel pins to viewport.
+
+- **Boot** (`#boot`): `height: 380vh` outer, `100vh` sticky inner. Progress = `(scrollY - sectionTop) / (sectionHeight - viewportHeight)`.
+- **Homelab** (`#homelab`): `height: 480vh` outer, `100vh` sticky inner. Progress maps to 4 stages via `Math.floor(progress * 4)`.
+
+## Terminal line classes
+
+Lines injected by the boot scroll driver use CSS classes from `styles.css`:
+- `.t-line.ok` — green, standard boot messages
+- `.t-line.info` — cyan, per-service URL lines
+- `.t-line.done` — bright green bold, final line
+- `.t-line.show` — triggers the reveal transition (added via `requestAnimationFrame` after DOM insertion)
+
+## Telemetry section
+
+`#telemetry` (`s-telemetry`) — 6-card grid (`tlm-grid`) with these data-metric values: `cpu`, `mem`, `net`, `disk`, `temp`, plus a stats card. The primary CPU card (`tlm-primary`) spans 3 columns and holds an SVG sparkline. Metrics are currently simulated — to wire to a real backend, replace the `update()` function in IIFE 12 with a `fetch` call to a JSON endpoint and map response fields to `[data-tlm-val]` elements. Log lines are injected as `<span class="ll {level}">` inside `#tlmLog`.
+
+## Timeline section
+
+`#timeline` (`s-timeline`) — vertical build log rail (`.tl-track` / `.tl-rail`) with `.tl-item` milestones. The rail has an animated glow pulse via `::after`. Each item uses `.tl-dot` (pulsing on last item). All items use `.reveal-up` for scroll-in.
+
+## Key CSS classes
+
+| Class | Trigger | Effect |
+|-------|---------|--------|
+| `.reveal-up` | `.visible` added by observer | `opacity 0→1`, `translateY(36px) skewY(1deg) → none` |
+| `.boot-intro` | `.hide` added by JS | `opacity → 0`, then element removed |
+| `.cur-ring` | `.hover` added by JS | expands `28px → 44px`, border turns cyan |
+| `.to-top` | `.show` added on scroll | fades in from `translateY(12px)` |
+| `.hl-stage` / `.hl-panel` | `.active` toggled by homelab driver | fades in from offset position |
+| `.svc-card` | `.hidden` toggled by filter | `display: none` |
+| `.tlm-card` | `data-metric` attribute | identifies which metric to update |
+
+## Service cards
+
+Each `.svc-card` carries `data-category="media|infrastructure|network"`. The JS filter and CSS theming both read this. The `.svc-icon` and `.svc-badge` inside carry `data-cat="..."` which drives `--cat-color` via CSS `:has()`.
+
+## Reduced-motion guard
+
+IIFEs 0f, 3 (hero canvas), 4 (typing animation), and 12 (telemetry) check `matchMedia('(prefers-reduced-motion: reduce)').matches` at startup and return early or skip intervals. IIFE 4 sets a static fallback string (`'Homelab Engineer'`) instead of animating.
+
+## Custom cursor notes
+
+The cursor is only active on `(hover: hover) and (pointer: fine)` devices (not touch). CSS sets `cursor: none` on `body, a, button` inside that media query. Both `#curDot` and `#curRing` use `position: fixed; top: 0; left: 0` anchored at origin — positioning is done entirely via `transform: translate(x, y) translate(-50%, -50%)` so centering stays correct even when ring size transitions.

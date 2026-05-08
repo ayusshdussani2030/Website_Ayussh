@@ -1,0 +1,25 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+
+  - job_name: "vmware_esxi"
+    static_configs:
+      - targets: ["vmware-exporter:9272"]
+
+  - job_name: "node_ubuntu_server_01"
+    static_configs:
+      - targets: ["192.168.1.101:9100"]   # update with actual VM IP
+
+  - job_name: "node_docker_host"
+    static_configs:
+      - targets: ["192.168.1.102:9100"]   # update with actual VM IP
+
+  - job_name: "node_dns_server"
+    static_configs:
+      - targets: ["192.168.1.103:9100"]   # update with actual VM IP
+
+  - job_name: "node_dev_machine"
+    static_configs:
+      - targets: ["192.168.1.104:9100"]   # update with actual VM IP

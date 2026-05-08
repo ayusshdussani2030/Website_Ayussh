@@ -1,0 +1,12 @@
+services:
+  metrics-api:
+    build: .
+    container_name: metrics-api
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    network_mode: host
+    environment:
+      ZFS_AGENT_URL: "http://ubuntu-server-01:5001"
+    # host networking so psutil sees the real interfaces and /proc
+    # remove network_mode: host on non-Linux and map the port instead

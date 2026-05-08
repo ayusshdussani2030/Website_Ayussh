@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bytefort.xyz — Ayussh's Digital Fortress</title>
+  <meta name="description" content="bytefort.xyz — Personal homelab, AI lab, self-hosted services, and networking experiments. 10 active services running 24/7 on bare metal." />
+  <meta property="og:title" content="bytefort.xyz — Digital Fortress" />
+  <meta property="og:description" content="Homelab. AI lab. Networks. Self-hosted everything." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#030508" />
+  <link rel="canonical" href="https://bytefort.xyz" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- Boot intro overlay -->
+<div id="bootIntro" class="boot-intro" aria-hidden="true">
+  <div class="bi-inner">
+    <div class="bi-logo mono"><span class="bi-dim">[</span>bf<span class="bi-dim">]</span>.xyz</div>
+    <div class="bi-tagline">Digital Fortress // System Init v1.0</div>
+    <div class="bi-bar-wrap"><div class="bi-bar" id="biBar"></div></div>
+    <div class="bi-footer">
+      <span id="biStatus">LOADING KERNEL MODULES...</span>
+      <span id="biPct">0%</span>
+    </div>
+  </div>
+</div>
+
+<!-- Progress bar -->
+<div id="progressBar" class="progress-bar"></div>
+
+<!-- Mouse glow -->
+<div id="mouseGlow" class="mouse-glow"></div>
+
+<!-- Custom cursor -->
+<div id="curDot" class="cur-dot" aria-hidden="true"></div>
+<div id="curRing" class="cur-ring" aria-hidden="true"></div>
+
+<!-- Film grain -->
+<div class="grain-overlay" aria-hidden="true"></div>
+
+<!-- ============================================================ NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">
+      <span class="logo-bracket">[</span>bf<span class="logo-bracket">]</span><span class="logo-tld">.xyz</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#boot">Boot</a></li>
+      <li><a href="#homelab">Homelab</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#telemetry">Telemetry</a></li>
+      <li><a href="#timeline">Build Log</a></li>
+      <li><a href="#ailab">AI Lab</a></li>
+      <li><a href="#network">Stack</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="nav-status">
+        <span class="status-dot"></span>
+        <span class="status-text">ONLINE</span>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <ul>
+    <li><a href="#boot" class="mobile-link">Boot</a></li>
+    <li><a href="#homelab" class="mobile-link">Homelab</a></li>
+    <li><a href="#services" class="mobile-link">Services</a></li>
+    <li><a href="#telemetry" class="mobile-link">Telemetry</a></li>
+    <li><a href="#timeline" class="mobile-link">Build Log</a></li>
+    <li><a href="#ailab" class="mobile-link">AI Lab</a></li>
+    <li><a href="#network" class="mobile-link">Stack</a></li>
+  </ul>
+  <div class="mobile-status"><span class="status-dot"></span><span>All systems operational</span></div>
+</div>
+
+<!-- ============================================================ HERO -->
+<section id="hero" class="s-hero">
+  <canvas id="heroCanvas"></canvas>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <!-- HUD corners -->
+  <div class="hud-corner tl" aria-hidden="true"></div>
+  <div class="hud-corner tr" aria-hidden="true"></div>
+  <div class="hud-corner bl" aria-hidden="true"></div>
+  <div class="hud-corner br" aria-hidden="true"></div>
+
+  <!-- Floating grid lines -->
+  <div class="hero-h-line top" aria-hidden="true"></div>
+  <div class="hero-h-line bottom" aria-hidden="true"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="blink-dot"></span>
+      <span class="mono">// SYSTEM ACTIVE // 2025</span>
+    </div>
+
+    <h1 class="hero-name">
+      <span class="glitch" data-text="BYTEFORT">BYTEFORT</span>
+      <span class="hero-tld">.xyz</span>
+    </h1>
+
+    <div class="hero-role-wrap">
+      <span class="mono hero-role-prefix">&gt;&nbsp;</span>
+      <span class="mono" id="typedText"></span>
+      <span class="cursor-blink mono">█</span>
+    </div>
+
+    <p class="hero-desc">
+      Building a self-hosted digital fortress from scratch.<br>
+      Homelab. AI experiments. Networks. All from my bedroom.
+    </p>
+
+    <div class="hero-stats">
+      <div class="hs-item">
+        <span class="hs-num mono" data-count="10">0</span>
+        <span class="hs-label mono">Services Online</span>
+      </div>
+      <div class="hs-sep"></div>
+      <div class="hs-item">
+        <span class="hs-num mono" data-count="99">0</span><span class="hs-suf mono">%</span>
+        <span class="hs-label mono">Uptime</span>
+      </div>
+      <div class="hs-sep"></div>
+      <div class="hs-item">
+        <span class="hs-num mono" id="uptimeDays">—</span>
+        <span class="hs-label mono">Days Online</span>
+      </div>
+    </div>
+
+    <div class="hero-actions">
+      <a href="#boot" class="btn-cyber">
+        <span class="btn-cyber-text">ENTER THE FORTRESS</span>
+        <svg class="btn-cyber-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#services" class="btn-outline-cyber">VIEW SYSTEMS</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll-hint">
+    <span class="mono">SCROLL TO BOOT</span>
+    <div class="chevrons">
+      <div class="chevron"></div>
+      <div class="chevron"></div>
+      <div class="chevron"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ BOOT SEQUENCE (sticky) -->
+<section id="boot" class="s-boot">
+  <div class="boot-sticky">
+    <div class="boot-layout">
+
+      <div class="boot-left">
+        <div class="section-tag mono">// 00 INIT</div>
+        <h2 class="boot-heading">System<br><em>Boot.</em></h2>
+        <p class="boot-desc">Watch the fortress come online. Every service, every VM, every connection — in sequence.</p>
+      </div>
+
+      <div class="boot-right">
+        <div class="terminal-window">
+          <div class="tw-header">
+            <div class="tw-dots">
+              <span class="tw-dot tw-red"></span>
+              <span class="tw-dot tw-yellow"></span>
+              <span class="tw-dot tw-green"></span>
+            </div>
+            <span class="tw-title mono">ayussh@bytefort:~$ sudo boot --all</span>
+          </div>
+          <div class="tw-body mono" id="bootTerminal">
+            <div class="t-prompt"><span class="t-caret">▋</span></div>
+          </div>
+        </div>
+
+        <div class="boot-sys-stats" id="bootStats">
+          <div class="bss-row">
+            <div class="bss-item"><span class="bss-k mono">HOSTNAME</span><span class="bss-v mono">bytefort.xyz</span></div>
+            <div class="bss-item"><span class="bss-k mono">KERNEL</span><span class="bss-v mono">ESXi 8.0</span></div>
+          </div>
+          <div class="bss-row">
+            <div class="bss-item"><span class="bss-k mono">SERVICES</span><span class="bss-v mono green">10 / 10 ONLINE</span></div>
+            <div class="bss-item"><span class="bss-k mono">UPTIME</span><span class="bss-v mono green">99.9%</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="boot-progress-wrap">
+      <div class="boot-bar" id="bootBar"></div>
+      <span class="mono boot-pct" id="bootPct">0%</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ HOMELAB ARCHITECTURE (sticky) -->
+<section id="homelab" class="s-homelab">
+  <div class="homelab-sticky">
+    <div class="hl-bg-grid" aria-hidden="true"></div>
+
+    <div class="hl-left">
+      <div class="section-tag mono">// 01 HOMELAB</div>
+      <h2 class="hl-heading">The Digital<br><em>Fortress.</em></h2>
+      <div class="hl-stages">
+
+        <div class="hl-stage" id="hlStage0">
+          <div class="hl-stage-num mono">01</div>
+          <h3 class="hl-stage-title">The Machine</h3>
+          <p class="hl-stage-desc">Bare metal hardware running 24/7. Intel Xeon processor, 32GB ECC RAM, NVMe + HDD storage. Owned outright, no rental, no cloud.</p>
+          <div class="hl-tags">
+            <span class="hl-tag mono">Intel Xeon E3</span>
+            <span class="hl-tag mono">32GB DDR4</span>
+            <span class="hl-tag mono">ZFS Storage</span>
+          </div>
+        </div>
+
+        <div class="hl-stage" id="hlStage1">
+          <div class="hl-stage-num mono">02</div>
+          <h3 class="hl-stage-title">Virtualization</h3>
+          <p class="hl-stage-desc">VMware ESXi Type-1 hypervisor slices the hardware into isolated VMs. Ubuntu servers, Docker hosts, dedicated DNS — each perfectly contained.</p>
+          <div class="hl-tags">
+            <span class="hl-tag mono">VMware ESXi 8.0</span>
+            <span class="hl-tag mono">4 VMs Active</span>
+            <span class="hl-tag mono">Docker</span>
+          </div>
+        </div>
+
+        <div class="hl-stage" id="hlStage2">
+          <div class="hl-stage-num mono">03</div>
+          <h3 class="hl-stage-title">The Gateway</h3>
+          <p class="hl-stage-desc">Cloudflare Zero Trust Tunnel exposes services globally — zero open ports. Nginx Proxy Manager handles routing. Every subdomain gets a valid SSL cert.</p>
+          <div class="hl-tags">
+            <span class="hl-tag mono">Cloudflare Tunnel</span>
+            <span class="hl-tag mono">Nginx PM</span>
+            <span class="hl-tag mono">Zero Open Ports</span>
+          </div>
+        </div>
+
+        <div class="hl-stage" id="hlStage3">
+          <div class="hl-stage-num mono">04</div>
+          <h3 class="hl-stage-title">The Arsenal</h3>
+          <p class="hl-stage-desc">10 active services — media stack, infrastructure tools, web terminals, dashboards. All self-hosted, all under my control. No subscriptions, no data sharing.</p>
+          <div class="hl-tags">
+            <span class="hl-tag mono">10 Services</span>
+            <span class="hl-tag mono">No Subscriptions</span>
+            <span class="hl-tag mono">Full Control</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="hl-right">
+      <div class="hl-diagram" id="hlDiagram">
+        <!-- Stage 0: hardware -->
+        <div class="hl-panel" id="hlPanel0">
+          <div class="hl-panel-header mono">HARDWARE LAYER</div>
+          <div class="hl-hw-grid">
+            <div class="hw-block">
+              <div class="hw-icon">⚡</div>
+              <div class="hw-name mono">CPU</div>
+              <div class="hw-val mono">Xeon E3 v5</div>
+            </div>
+            <div class="hw-block">
+              <div class="hw-icon">🧠</div>
+              <div class="hw-name mono">RAM</div>
+              <div class="hw-val mono">64GB DDR3 ECC</div>
+            </div>
+            <div class="hw-block">
+              <div class="hw-icon">💾</div>
+              <div class="hw-name mono">NVMe</div>
+              <div class="hw-val mono">1TB SSD</div>
+            </div>
+            <div class="hw-block">
+              <div class="hw-icon">🗄</div>
+              <div class="hw-name mono">HDD</div>
+              <div class="hw-val mono">8TB ZFS</div>
+            </div>
+          </div>
+          <div class="hl-status-bar">
+            <span class="mono">STATUS</span>
+            <div class="status-fill"><div class="status-fill-inner" style="width:100%"></div></div>
+            <span class="mono green">RUNNING</span>
+          </div>
+        </div>
+
+        <!-- Stage 1: VMs -->
+        <div class="hl-panel" id="hlPanel1">
+          <div class="hl-panel-header mono">VIRTUALIZATION LAYER</div>
+          <div class="hl-vm-tree mono">
+            <div class="vm-root">VMware ESXi 8.0 <span class="green">[HYPERVISOR]</span></div>
+            <div class="vm-branch">├── ubuntu-server-01 <span class="cyan">[VM]</span></div>
+            <div class="vm-branch">├── docker-host      <span class="cyan">[VM]</span></div>
+            <div class="vm-branch">├── dns-server       <span class="cyan">[VM]</span></div>
+            <div class="vm-branch">└── dev-machine      <span class="cyan">[VM]</span></div>
+          </div>
+          <div class="hl-status-bar">
+            <span class="mono">VMs ONLINE</span>
+            <div class="status-fill"><div class="status-fill-inner" style="width:100%"></div></div>
+            <span class="mono green">4 / 4</span>
+          </div>
+        </div>
+
+        <!-- Stage 2: networking -->
+        <div class="hl-panel" id="hlPanel2">
+          <div class="hl-panel-header mono">NETWORK LAYER</div>
+          <div class="hl-net-flow">
+            <div class="nf-node internet">
+              <span>🌐</span>
+              <span class="mono">Internet</span>
+            </div>
+            <div class="nf-arrow"><div class="nf-packet"></div></div>
+            <div class="nf-node cf">
+              <span>☁️</span>
+              <span class="mono">Cloudflare</span>
+            </div>
+            <div class="nf-arrow"><div class="nf-packet"></div></div>
+            <div class="nf-node nginx">
+              <span>🔀</span>
+              <span class="mono">Nginx PM</span>
+            </div>
+            <div class="nf-arrow"><div class="nf-packet"></div></div>
+            <div class="nf-node svcs">
+              <span>⚡</span>
+              <span class="mono">Services</span>
+            </div>
+          </div>
+          <div class="mono" style="font-size:0.72rem; color: var(--text-dim); margin-top:1rem">
+            SSL: Let's Encrypt &nbsp;|&nbsp; Domains: *.bytefort.xyz &nbsp;|&nbsp; Open ports: 0
+          </div>
+        </div>
+
+        <!-- Stage 3: services -->
+        <div class="hl-panel" id="hlPanel3">
+          <div class="hl-panel-header mono">SERVICES LAYER <span class="green">[ 10 / 10 ONLINE ]</span></div>
+          <div class="hl-svc-grid">
+            <div class="hl-svc green-dot mono">● Dashboard</div>
+            <div class="hl-svc green-dot mono">● Jellyfin</div>
+            <div class="hl-svc green-dot mono">● Radarr</div>
+            <div class="hl-svc green-dot mono">● Sonarr</div>
+            <div class="hl-svc green-dot mono">● Prowlarr</div>
+            <div class="hl-svc green-dot mono">● qBittorrent</div>
+            <div class="hl-svc green-dot mono">● Jellyseerr</div>
+            <div class="hl-svc green-dot mono">● Nginx PM</div>
+            <div class="hl-svc green-dot mono">● VMware</div>
+            <div class="hl-svc green-dot mono">● WeTTY</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================ SERVICES GRID -->
+<section id="services" class="s-services">
+  <div class="container">
+    <div class="section-header reveal-up">
+      <div class="section-tag mono">// 02 ACTIVE SERVICES</div>
+      <h2 class="section-heading">Systems <em>Online.</em></h2>
+      <p class="section-lead">Every service runs on hardware I own. No cloud dependency. No subscriptions. Just full control.</p>
+    </div>
+
+    <div class="filter-bar reveal-up" role="group" aria-label="Filter by category">
+      <button class="filter-btn active" data-filter="all">all</button>
+      <button class="filter-btn" data-filter="media">media</button>
+      <button class="filter-btn" data-filter="infrastructure">infrastructure</button>
+      <button class="filter-btn" data-filter="network">network</button>
+    </div>
+
+    <div class="services-grid" id="servicesGrid">
+
+      <a class="svc-card reveal-up" href="https://dash.bytefort.xyz" target="_blank" rel="noopener" data-category="infrastructure">
+        <div class="svc-card-glow"></div>
+        <div class="svc-card-top">
+          <div class="svc-icon" data-cat="infrastructure">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+          </div>
+          <span class="svc-badge mono" data-cat="infrastructure">Infrastructure</span>
+        </div>
+        <h3 class="svc-name">Dashboard</h3>
+        <p class="svc-desc">Central hub for all services — status overview, quick launch panel, live system metrics.</p>
+        <div class="svc-footer">
+          <span class="svc-url mono">dash.bytefort.xyz <svg class="svc-arrow" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg></span>
+          <span class="svc-status mono"><span class="svc-dot"></span>Active</span>
+        </div>
+      </a>
+
+      <a class="svc-card reveal-up" href="https://jellyfin.bytefort.xyz" target="_blank" rel="noopener" data-category="media">
+        <div class="svc-card-glow"></div>
+        <div class="svc-card-top">
+          <div class="svc-icon" data-cat="media">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5,3 19,12 5,21"/></svg>
+          </div>
+          <span class="svc-badge mono" data-cat="media">Media</span>
+        </div>
+        <h3 class="svc-name">Jellyfin</h3>
+        <p class="svc-desc">Open-source media streaming server. Movies, TV, music — streamed privately, on any device.</p>
+        <div class="svc-footer">
+          <span class="svc-url mono">jellyfin.bytefort.xyz <svg class="svc-arrow" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg></span>
+          <span class="svc-status mono"><span class="svc-dot"></span>Active</span>
+        </div>
+      </a>
+
+      <a class="svc-card reveal-up" href="https://jellyseerr.bytefort.xyz" target="_blank" rel="noopener" data-category="media">
+        <div class="svc-card-glow"></div>
+        <div class="svc-card-top">
+          <div class="svc-icon" data-cat="media">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="14.5" r="0.5" fill="currentColor"/></svg>
+          </div>
+          <span class="svc-badge mono" data-cat="media">Media</span>
+        </div>
+        <h3 class="svc-name">Jellyseerr</h3>
+        <p class="svc-desc">Media request and discovery management. Request, track, and auto-download any movie or show.</p>
+        <div class="svc-footer">
+          <span class="svc-url mono">jellyseerr.bytefort.xyz <svg class="svc-arrow" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg></span>
+          <span class="svc-status mono"><span class="svc-dot"></span>Active</span>
+        </div>
+      </a>
+
+      <a class="svc-card reveal-up" href="https://prowlarr.bytefort.xyz" target="_blank" rel="noopener" data-category="media">
+        <div class="svc-card-glow"></div>
+        <div class="svc-card-top">
+          <div class="svc-icon" data-cat="media">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>
+          </div>
+          <span class="svc-badge mono" data-cat="media">Media</span>
+        </div>
+        <h3 class="svc-name">Prowlarr</h3>
+        <p class="svc-desc">Unified indexer manager for the *arr stack. Aggregates sources for Radarr and Sonarr.</p>
+        <div class="svc-footer">
+          <span class="svc-url mono">prowlarr.bytefort.xyz <svg class="svc-arrow" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg></span>
+          <span class="svc-status mono"><span class="svc-dot"></span>Active</span>
+        </div>
+      </a>
+
+      <a class="svc-card reveal-up" href="https://proxy.bytefort.xyz" target="_blank" rel="noopener" data-category="network">
+        <div class="svc-card-glow"></div>
+        <div class="svc-card-top">
+          <div class="svc-icon" data-cat="network">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          </div>
+          <span class="svc-badge mono" data-cat="network">Network</span>
+        </div>
+        <h3 class="svc-name">Nginx Proxy Manager</h3>
+        <p class="svc-desc">Reverse proxy and SSL management. Routes all bytefort subdomains with automatic HTTPS.</p>
+        <div class="svc-footer">
+          <span class="svc-url mono">proxy.bytefort.xyz <svg class="svc-arrow" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg></span>
+          <span class="svc-status mono"><span class="svc-dot"></span>Active</span>
+        </div>
+      </a>
+
+      <a class="svc-card reveal-up" href="https://qbit.bytefort.xyz" target="_blank" rel="noopener" data-category="infrastructure">
+        <div class="svc-card-glow"></div>
+        <div class="svc-card-top">
+          <div class="svc-icon" data-cat="infrastructure">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13M8 12l4 4 4-4"/><line x1="5" y1="20" x2="19" y2="20"/></svg>
+          </div>
+          <span class="svc-badge mono" data-cat="infrastructure">Infrastructure</span>
+        </div>
+        <h3 class="svc-name">qBittorrent</h3>
+        <p class="svc-desc">Self-hosted torrent client with web UI. Managed downloads feeding directly into the media pipeline.</p>
+        <div class="svc-footer">
+          <span class="svc-url mono">qbit.bytefort.xyz <svg class="svc-arrow" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg></span>
+          <span class="svc-status mono"><span class="svc-dot"></span>Active</span>
+        </div>
+      </a>
+
+      <a class="svc-card reveal-up" href="https://radarr.bytefort.xyz" target="_blank" rel="noopener" data-category="media">
+        <div class="svc-card-glow"></div>
+        <div class="svc-card-top">
+          <div class="svc-icon" data-cat="media">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l4.553-2.069A1 1 0 0121 8.87V15.13a1 1 0 01-1.447.9L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+          </div>
+          <span class="svc-badge mono" data-cat="media">Media</span>
+        </div>
+        <h3 class="svc-name">Radarr</h3>
+        <p class="svc-desc">Automated movie collection manager. Monitors, grabs, sorts, and renames files automatically.</p>
+        <div class="svc-footer">
+          <span class="svc-url mono">radarr.bytefort.xyz <svg class="svc-arrow" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg></span>
+          <span class="svc-status mono"><span class="svc-dot"></span>Active</span>
+        </div>
+      </a>
+
+      <a class="svc-card reveal-up" href="https://sonarr.bytefort.xyz" target="_blank" rel="noopener" data-category="media">
+        <div class="svc-card-glow"></div>
+        <div class="svc-card-top">
+          <div class="svc-icon" data-cat="media">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <span class="svc-badge mono" data-cat="media">Media</span>
+        </div>
+        <h3 class="svc-name">Sonarr</h3>
+        <p class="svc-desc">Smart TV series manager. Auto-downloads episodes and organizes your series library.</p>
+        <div class="svc-footer">
+          <span class="svc-url mono">sonarr.bytefort.xyz <svg class="svc-arrow" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg></span>
+          <span class="svc-status mono"><span class="svc-dot"></span>Active</span>
+        </div>
+      </a>
+
+      <a class="svc-card reveal-up" href="https://vmware.bytefort.xyz" target="_blank" rel="noopener" data-category="infrastructure">
+        <div class="svc-card-glow"></div>
+        <div class="svc-card-top">
+          <div class="svc-icon" data-cat="infrastructure">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="6" cy="6" r="1" fill="currentColor"/><circle cx="6" cy="18" r="1" fill="currentColor"/><line x1="10" y1="6" x2="18" y2="6" stroke-opacity="0.5"/><line x1="10" y1="18" x2="18" y2="18" stroke-opacity="0.5"/></svg>
+          </div>
+          <span class="svc-badge mono" data-cat="infrastructure">Infrastructure</span>
+        </div>
+        <h3 class="svc-name">VMware</h3>
+        <p class="svc-desc">VMware hypervisor management interface. Deploy, monitor, and control virtual machines.</p>
+        <div class="svc-footer">
+          <span class="svc-url mono">vmware.bytefort.xyz <svg class="svc-arrow" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg></span>
+          <span class="svc-status mono"><span class="svc-dot"></span>Active</span>
+        </div>
+      </a>
+
+      <a class="svc-card reveal-up" href="https://wetty1.bytefort.xyz" target="_blank" rel="noopener" data-category="infrastructure">
+        <div class="svc-card-glow"></div>
+        <div class="svc-card-top">
+          <div class="svc-icon" data-cat="infrastructure">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 9l3 3-3 3M13 15h3"/></svg>
+          </div>
+          <span class="svc-badge mono" data-cat="infrastructure">Infrastructure</span>
+        </div>
+        <h3 class="svc-name">WeTTY</h3>
+        <p class="svc-desc">Browser-based SSH terminal. Full shell access from any device, no client software needed.</p>
+        <div class="svc-footer">
+          <span class="svc-url mono">wetty1.bytefort.xyz <svg class="svc-arrow" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg></span>
+          <span class="svc-status mono"><span class="svc-dot"></span>Active</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ LIVE TELEMETRY -->
+<section id="telemetry" class="s-telemetry">
+  <div class="container">
+    <div class="section-header reveal-up">
+      <div class="section-tag mono">// 02b LIVE TELEMETRY</div>
+      <h2 class="section-heading">System <em>Vitals.</em></h2>
+      <p class="section-lead">Real-time pulse of the fortress. Updated every 2 seconds straight from the bare metal.</p>
+    </div>
+
+    <div class="tlm-grid reveal-up">
+      <!-- Big primary card: CPU + sparkline -->
+      <div class="tlm-card tlm-primary" data-metric="cpu">
+        <div class="tlm-head">
+          <span class="tlm-label mono">CPU LOAD</span>
+          <span class="tlm-pill mono"><span class="status-dot"></span> live</span>
+        </div>
+        <div class="tlm-big mono"><span data-tlm-val>14</span><span class="tlm-unit">%</span></div>
+        <div class="tlm-sub mono">Xeon E3-1230 v5 · 4c/8t · 3.40 GHz</div>
+        <svg class="tlm-spark" viewBox="0 0 240 60" preserveAspectRatio="none" data-tlm-spark>
+          <defs>
+            <linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#67e8f9" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="#67e8f9" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path data-tlm-area fill="url(#sparkFill)" d=""></path>
+          <path data-tlm-line fill="none" stroke="#67e8f9" stroke-width="1.4" d=""></path>
+        </svg>
+        <div class="tlm-grid-overlay" aria-hidden="true"></div>
+      </div>
+
+      <!-- Mem -->
+      <div class="tlm-card" data-metric="mem">
+        <div class="tlm-head">
+          <span class="tlm-label mono">MEMORY</span>
+          <span class="tlm-pill mono">62.1G</span>
+        </div>
+        <div class="tlm-big mono"><span data-tlm-val>38</span><span class="tlm-unit">%</span></div>
+        <div class="tlm-bar"><div class="tlm-bar-fill" data-tlm-fill style="width:38%"></div></div>
+        <div class="tlm-sub mono">23.6 / 64 GB DDR3 ECC</div>
+      </div>
+
+      <!-- Net -->
+      <div class="tlm-card" data-metric="net">
+        <div class="tlm-head">
+          <span class="tlm-label mono">NETWORK</span>
+          <span class="tlm-pill mono">1 GbE</span>
+        </div>
+        <div class="tlm-stack">
+          <div class="tlm-row"><span class="tlm-arrow up">↑</span><span class="mono"><span data-tlm-val>4.2</span> Mb/s</span></div>
+          <div class="tlm-row"><span class="tlm-arrow dn">↓</span><span class="mono"><span data-tlm-val2>18.7</span> Mb/s</span></div>
+        </div>
+        <svg class="tlm-spark sm" viewBox="0 0 200 40" preserveAspectRatio="none" data-tlm-spark>
+          <path data-tlm-line fill="none" stroke="#4ade80" stroke-width="1.2" d=""></path>
+        </svg>
+      </div>
+
+      <!-- Disk -->
+      <div class="tlm-card" data-metric="disk">
+        <div class="tlm-head">
+          <span class="tlm-label mono">STORAGE</span>
+          <span class="tlm-pill mono">ZFS</span>
+        </div>
+        <div class="tlm-big mono"><span data-tlm-val>2.8</span><span class="tlm-unit">TB</span></div>
+        <div class="tlm-bar"><div class="tlm-bar-fill" data-tlm-fill style="width:35%; background: linear-gradient(90deg, var(--cyan), var(--purple));"></div></div>
+        <div class="tlm-sub mono">2.8 / 8 TB used · 1.9× compression</div>
+      </div>
+
+      <!-- Temp -->
+      <div class="tlm-card" data-metric="temp">
+        <div class="tlm-head">
+          <span class="tlm-label mono">CPU TEMP</span>
+          <span class="tlm-pill mono">cool</span>
+        </div>
+        <div class="tlm-big mono"><span data-tlm-val>42</span><span class="tlm-unit">°C</span></div>
+        <div class="tlm-thermo"><div class="tlm-thermo-fill" data-tlm-fill style="width:42%"></div></div>
+        <div class="tlm-sub mono">Idle range · fan @ 800 rpm</div>
+      </div>
+
+      <!-- Uptime / requests -->
+      <div class="tlm-card tlm-stats">
+        <div class="tlm-head"><span class="tlm-label mono">REQUESTS / MIN</span><span class="tlm-pill mono">24h</span></div>
+        <div class="tlm-big mono"><span data-tlm-val>284</span></div>
+        <div class="tlm-bars">
+          <div class="tb"></div><div class="tb"></div><div class="tb"></div><div class="tb"></div><div class="tb"></div>
+          <div class="tb"></div><div class="tb"></div><div class="tb"></div><div class="tb"></div><div class="tb"></div>
+          <div class="tb"></div><div class="tb"></div><div class="tb"></div><div class="tb"></div><div class="tb"></div>
+          <div class="tb"></div><div class="tb"></div><div class="tb"></div><div class="tb"></div><div class="tb"></div>
+        </div>
+        <div class="tlm-sub mono">last 20 min · peak 412/min</div>
+      </div>
+    </div>
+
+    <!-- Live log stream -->
+    <div class="tlm-log reveal-up">
+      <div class="tlm-log-head">
+        <div class="tlm-log-title mono"><span class="status-dot"></span> /var/log/bytefort.log <span class="tlm-log-tail">— tailing</span></div>
+        <div class="tlm-log-controls mono">
+          <span class="tlm-chip on">all</span><span class="tlm-chip">info</span><span class="tlm-chip">warn</span><span class="tlm-chip">err</span>
+        </div>
+      </div>
+      <div class="tlm-log-body mono" id="tlmLog" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ TIMELINE -->
+<section id="timeline" class="s-timeline">
+  <div class="container">
+    <div class="section-header reveal-up">
+      <div class="section-tag mono">// 02c BUILD LOG</div>
+      <h2 class="section-heading">Two years <em>in the rack.</em></h2>
+      <p class="section-lead">Every milestone, every late-night SSH session. The fortress wasn't built in a day.</p>
+    </div>
+
+    <div class="tl-track">
+      <div class="tl-rail" aria-hidden="true"></div>
+
+      <div class="tl-item reveal-up">
+        <div class="tl-dot"></div>
+        <div class="tl-meta mono"><span class="tl-date">2024 · JAN</span><span class="tl-tag">v0.1 · genesis</span></div>
+        <h3 class="tl-title">First boot</h3>
+        <p class="tl-desc">Bought a used Dell T130 off marketplace for 12k INR. Installed Ubuntu Server, configured static IP, pinged it from across the room. Hooked.</p>
+      </div>
+
+      <div class="tl-item reveal-up">
+        <div class="tl-dot"></div>
+        <div class="tl-meta mono"><span class="tl-date">2024 · MAR</span><span class="tl-tag">v0.4 · media</span></div>
+        <h3 class="tl-title">Jellyfin goes live</h3>
+        <p class="tl-desc">First service exposed publicly via Cloudflare Tunnel. Streamed a 4K movie to my phone on mobile data. Felt like magic.</p>
+      </div>
+
+      <div class="tl-item reveal-up">
+        <div class="tl-dot"></div>
+        <div class="tl-meta mono"><span class="tl-date">2024 · JUL</span><span class="tl-tag">v1.0 · esxi</span></div>
+        <h3 class="tl-title">Reformat — going Type-1</h3>
+        <p class="tl-desc">Wiped Ubuntu, installed VMware ESXi 8.0. Migrated everything into VMs. Lost 4 hours of sleep, gained proper isolation.</p>
+      </div>
+
+      <div class="tl-item reveal-up">
+        <div class="tl-dot"></div>
+        <div class="tl-meta mono"><span class="tl-date">2024 · OCT</span><span class="tl-tag">v1.4 · *arr</span></div>
+        <h3 class="tl-title">The *arr stack</h3>
+        <p class="tl-desc">Radarr + Sonarr + Prowlarr + Jellyseerr. The full automated pipeline. Request a movie on a phone, watch it 20 minutes later.</p>
+      </div>
+
+      <div class="tl-item reveal-up">
+        <div class="tl-dot"></div>
+        <div class="tl-meta mono"><span class="tl-date">2025 · FEB</span><span class="tl-tag">v2.0 · zfs</span></div>
+        <h3 class="tl-title">8TB ZFS pool</h3>
+        <p class="tl-desc">Added an 8TB drive, set up ZFS with compression and snapshots. First successful rollback after a bad <span class="mono">rm -rf</span> saved me.</p>
+      </div>
+
+      <div class="tl-item reveal-up">
+        <div class="tl-dot"></div>
+        <div class="tl-meta mono"><span class="tl-date">2025 · JUN</span><span class="tl-tag">v2.4 · ai</span></div>
+        <h3 class="tl-title">Local LLMs</h3>
+        <p class="tl-desc">Spun up Ollama, ran LLaMA 3 on bare metal. ~14 tok/s on CPU. Slow, but private. Started writing the AI lab section.</p>
+      </div>
+
+      <div class="tl-item reveal-up">
+        <div class="tl-dot"></div>
+        <div class="tl-meta mono"><span class="tl-date">2026 · NOW</span><span class="tl-tag">v3.0 · live</span></div>
+        <h3 class="tl-title">10 services. 99.9% uptime.</h3>
+        <p class="tl-desc">Where we are today. Custom dashboard, monitored every metric, zero incidents this quarter. Next: GPU passthrough, k3s cluster, observability.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ AI LAB -->
+<section id="ailab" class="s-ailab">
+  <div class="container">
+    <div class="section-header reveal-up">
+      <div class="section-tag mono">// 03 AI LAB</div>
+      <h2 class="section-heading">Neural <em>Experiments.</em></h2>
+      <p class="section-lead">Running AI models locally. No OpenAI, no API limits — pure local inference on homelab hardware.</p>
+    </div>
+
+    <div class="ai-grid">
+      <div class="ai-card reveal-up">
+        <div class="ai-card-num mono">01</div>
+        <div class="ai-card-icon">🤖</div>
+        <h3 class="ai-card-title">Local LLMs</h3>
+        <p class="ai-card-desc">Running Ollama with LLaMA 3 and Mistral models on bare metal. Private inference, zero data leaving the fortress. Testing model performance at home hardware limits.</p>
+        <div class="ai-card-tags">
+          <span class="ai-tag mono">Ollama</span>
+          <span class="ai-tag mono">LLaMA 3</span>
+          <span class="ai-tag mono">Mistral</span>
+        </div>
+      </div>
+
+      <div class="ai-card reveal-up">
+        <div class="ai-card-num mono">02</div>
+        <div class="ai-card-icon">👁</div>
+        <h3 class="ai-card-title">Vision &amp; Detection</h3>
+        <p class="ai-card-desc">Computer vision experiments using Python + OpenCV. Object detection pipelines, camera feeds running locally. Learning how models perceive the world.</p>
+        <div class="ai-card-tags">
+          <span class="ai-tag mono">Python</span>
+          <span class="ai-tag mono">OpenCV</span>
+          <span class="ai-tag mono">YOLOv8</span>
+        </div>
+      </div>
+
+      <div class="ai-card reveal-up">
+        <div class="ai-card-num mono">03</div>
+        <div class="ai-card-icon">⚙️</div>
+        <h3 class="ai-card-title">AI Automation</h3>
+        <p class="ai-card-desc">LLM-powered scripts for homelab automation — auto-classifying media, smart notifications, self-healing infrastructure scripts. AI doing the boring stuff.</p>
+        <div class="ai-card-tags">
+          <span class="ai-tag mono">Python</span>
+          <span class="ai-tag mono">LangChain</span>
+          <span class="ai-tag mono">Bash</span>
+        </div>
+      </div>
+
+      <div class="ai-card reveal-up">
+        <div class="ai-card-num mono">04</div>
+        <div class="ai-card-icon">📊</div>
+        <h3 class="ai-card-title">Model Benchmarking</h3>
+        <p class="ai-card-desc">Systematically testing AI models on homelab hardware — tokens/sec, memory usage, accuracy on local tasks. Building a personal performance database.</p>
+        <div class="ai-card-tags">
+          <span class="ai-tag mono">Benchmarks</span>
+          <span class="ai-tag mono">Metrics</span>
+          <span class="ai-tag mono">Research</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ NETWORK / STACK -->
+<section id="network" class="s-network">
+  <div class="container">
+    <div class="section-header reveal-up">
+      <div class="section-tag mono">// 04 THE STACK</div>
+      <h2 class="section-heading">Infrastructure <em>Layer.</em></h2>
+      <p class="section-lead">Every component chosen for control and reliability. Hardware-owned. Software-controlled. No black boxes.</p>
+    </div>
+
+    <div class="infra-grid">
+      <div class="infra-card reveal-up">
+        <div class="ic-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="6" cy="6" r="1" fill="currentColor"/><circle cx="6" cy="18" r="1" fill="currentColor"/><line x1="10" y1="6" x2="18" y2="6" stroke-opacity="0.5"/><line x1="10" y1="18" x2="18" y2="18" stroke-opacity="0.5"/></svg></div>
+        <h3>VMware ESXi</h3>
+        <p>Type-1 bare-metal hypervisor. Runs all virtual machines across the cluster with hardware-level isolation.</p>
+      </div>
+
+      <div class="infra-card reveal-up">
+        <div class="ic-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 9l3 3-3 3M13 15h3"/></svg></div>
+        <h3>Linux</h3>
+        <p>Ubuntu and Debian-based VMs running every service. Full OS-level control over packages and kernel.</p>
+      </div>
+
+      <div class="infra-card reveal-up">
+        <div class="ic-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+        <h3>Docker</h3>
+        <p>Container orchestration for isolated deployments. Reproducible environments, easy updates, clean rollbacks.</p>
+      </div>
+
+      <div class="infra-card reveal-up">
+        <div class="ic-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+        <h3>Nginx Proxy Manager</h3>
+        <p>Reverse proxy with SSL termination. Every service gets a clean *.bytefort.xyz subdomain and valid cert.</p>
+      </div>
+
+      <div class="infra-card reveal-up">
+        <div class="ic-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10"/><path d="M12 2a15.3 15.3 0 00-4 10 15.3 15.3 0 004 10"/></svg></div>
+        <h3>Cloudflare Tunnel</h3>
+        <p>Zero-trust tunneling. No open ports, no public IPs. Traffic flows through Cloudflare's global edge network.</p>
+      </div>
+
+      <div class="infra-card reveal-up">
+        <div class="ic-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
+        <h3>ZFS Storage</h3>
+        <p>Copy-on-write filesystem with data integrity checksums, compression, and instant snapshots.</p>
+      </div>
+    </div>
+
+    <div class="data-flow reveal-up" aria-label="Data flow">
+      <div class="df-node">Internet</div>
+      <div class="df-line"><div class="df-packet"></div></div>
+      <div class="df-node">Cloudflare</div>
+      <div class="df-line"><div class="df-packet"></div></div>
+      <div class="df-node">Nginx PM</div>
+      <div class="df-line"><div class="df-packet"></div></div>
+      <div class="df-node">Services</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ CTA -->
+<section id="cta" class="s-cta">
+  <div class="cta-rings" aria-hidden="true">
+    <div class="cta-ring r1"></div>
+    <div class="cta-ring r2"></div>
+    <div class="cta-ring r3"></div>
+    <div class="cta-ring r4"></div>
+  </div>
+  <div class="cta-content reveal-up">
+    <div class="cta-cmd mono" id="sshCmd" title="Click to copy">$ ping bytefort.xyz</div>
+    <h2 class="cta-heading">
+      The fortress<br>is <span class="glitch" data-text="always">always</span> online.
+    </h2>
+    <p class="cta-desc">10 services. Zero cloud. Built from scratch.<br>This is just the beginning.</p>
+    <div class="cta-stats">
+      <div class="cta-stat"><span class="cta-stat-n mono" data-count="10">0</span><span class="cta-stat-l mono">Services</span></div>
+      <div class="cta-stat"><span class="cta-stat-n mono" data-count="99">0</span><span class="cta-stat-l mono">% Uptime</span></div>
+      <div class="cta-stat"><span class="cta-stat-n mono">∞</span><span class="cta-stat-l mono">Ambition</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ FOOTER -->
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="footer-logo mono"><span class="logo-bracket">[</span>bf<span class="logo-bracket">]</span><span class="logo-tld">.xyz</span></span>
+      <span class="footer-tag mono">// Self-hosted. Always on.</span>
+    </div>
+    <div class="footer-status">
+      <span class="status-dot"></span>
+      <span class="mono">All systems operational</span>
+    </div>
+    <div class="footer-meta">
+      <span class="mono footer-copy">© 2025 bytefort.xyz</span>
+      <span class="mono footer-build">// running on bare metal</span>
+    </div>
+  </div>
+</footer>
+
+<button id="toTop" class="to-top" aria-label="Back to top">↑</button>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
