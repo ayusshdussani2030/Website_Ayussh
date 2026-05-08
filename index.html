@@ -580,11 +580,11 @@
       <div class="tlm-card" data-metric="mem">
         <div class="tlm-head">
           <span class="tlm-label mono">MEMORY</span>
-          <span class="tlm-pill mono">62.1G</span>
+          <span class="tlm-pill mono" id="tlmMemPill">62.1G</span>
         </div>
         <div class="tlm-big mono"><span data-tlm-val>38</span><span class="tlm-unit">%</span></div>
         <div class="tlm-bar"><div class="tlm-bar-fill" data-tlm-fill style="width:38%"></div></div>
-        <div class="tlm-sub mono">23.6 / 64 GB DDR3 ECC</div>
+        <div class="tlm-sub mono" id="tlmMemSub">23.6 / 64 GB DDR3 ECC</div>
       </div>
 
       <!-- Net -->
@@ -610,7 +610,7 @@
         </div>
         <div class="tlm-big mono"><span data-tlm-val>2.8</span><span class="tlm-unit">TB</span></div>
         <div class="tlm-bar"><div class="tlm-bar-fill" data-tlm-fill style="width:35%; background: linear-gradient(90deg, var(--cyan), var(--purple));"></div></div>
-        <div class="tlm-sub mono">2.8 / 8 TB used · 1.9× compression</div>
+        <div class="tlm-sub mono" id="tlmDiskSub">2.8 / 8 TB used · 1.9× compression</div>
       </div>
 
       <!-- Temp -->

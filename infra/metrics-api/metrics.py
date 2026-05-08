@@ -73,6 +73,9 @@ def metrics():
     else:
         mem = round(psutil.virtual_memory().percent, 1)
 
+    mem_used_gb  = round(mem_used_mb  / 1024, 1) if mem_used_mb  is not None else None
+    mem_total_gb = round(mem_total_mb / 1024, 1) if mem_total_mb is not None else None
+
     # ── CPU Temp (ESXi hardware sensor) ─────────────────────────────────
     temp = prom_query('vmware_host_sensor_temperature')
 
@@ -104,6 +107,8 @@ def metrics():
     return jsonify({
         "cpu":            cpu,
         "mem":            mem,
+        "mem_used_gb":    mem_used_gb,
+        "mem_total_gb":   mem_total_gb,
         "net_up":         net_up,
         "net_dn":         net_dn,
         "disk":           disk_used,

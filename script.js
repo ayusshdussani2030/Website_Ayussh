@@ -667,6 +667,20 @@
         if (typeof d.disk_frag  === 'number') state.diskFrag  = d.disk_frag;
         state.temp = typeof d.temp === 'number' ? Math.max(0, d.temp) : null;
         if (typeof d.req        === 'number') state.req       = Math.max(0, d.req);
+
+        // Update sub-text elements with real values
+        const memSub  = document.getElementById('tlmMemSub');
+        const memPill = document.getElementById('tlmMemPill');
+        const diskSub = document.getElementById('tlmDiskSub');
+        if (memSub && typeof d.mem_used_gb === 'number' && typeof d.mem_total_gb === 'number')
+          memSub.textContent = `${d.mem_used_gb} / ${d.mem_total_gb} GB DDR3 ECC`;
+        if (memPill && typeof d.mem_total_gb === 'number')
+          memPill.textContent = `${d.mem_total_gb}G`;
+        if (diskSub && typeof d.disk === 'number' && typeof d.disk_total === 'number') {
+          const cr = d.compress_ratio ? ` · ${d.compress_ratio}× compression` : '';
+          diskSub.textContent = `${d.disk} / ${d.disk_total} TB used${cr}`;
+        }
+
         apiOk = true;
       }
     } catch { /* network error or timeout — fall through to simulate */ }
