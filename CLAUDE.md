@@ -17,9 +17,9 @@ No build step, no bundler, no compilation. Files are served as-is.
 | File | Role |
 |------|------|
 | `index.html` | All markup and content. Single-page, anchor-based routing: `#hero` `#boot` `#homelab` `#services` `#telemetry` `#timeline` `#ailab` `#network` `#cta`. |
-| `styles.css` | All styling (~1878 lines). CSS custom properties in `:root` — change design tokens there first. No preprocessor. |
+| `styles.css` | All styling (~1950 lines). CSS custom properties in `:root` — change design tokens there first. No preprocessor. |
 | `script.js` | Self-contained IIFEs (see below). |
-| `favicon.svg` | SVG favicon — dark rounded square with `bf` in green. |
+| `favicon.svg` | SVG favicon — dark rounded square with `bf` in cyan (`#67e8f9`). |
 
 ## Design system
 
@@ -54,6 +54,8 @@ Service card category theming uses `:has([data-cat="..."])` to set `--cat-color`
 11. **Service filter** — `.filter-btn[data-filter]` toggles `.hidden` on `.svc-card[data-category]`.
 12. **Live telemetry** — `IntersectionObserver` starts on `#telemetry`; simulates CPU/mem/net/temp/req metrics with drift. Updates every 2.2s. Draws sparklines via SVG path generation. Tails a fake log into `#tlmLog` every 1.4s. All animation skipped on `prefers-reduced-motion`.
 13. **WeTTY modal** — document-level click delegation on `[data-modal="wetty"]` opens `#wettyModal`. Uses `visibility`/`pointer-events` toggle (not `display`) so CSS transitions fire correctly. Closes on backdrop click, close button, or `Escape`.
+14. **Secret terminal** — press `` ` `` to open a slide-up terminal panel (`#secretTerm`). Commands: `help neofetch df free top uname date ip addr docker ps services ping traceroute speedtest curl sudo rm vim fortune matrix clear exit`. `openTerm()` sets all `.svc-modal` to `visibility:hidden`; `closeTerm()` restores them. `run()` splits input into `cmd + args[]` and dispatches to `CMDS[cmd](args)`.
+15. **Matrix rain** — Konami code (`↑↑↓↓←→←→BA`) or the `matrix` terminal command triggers a canvas rain on `#matrixRain` (z-index 99999). Listens for `CustomEvent('bytefort:matrix')` so the terminal can trigger it without coupling IIFEs.
 
 ## Sticky scroll sections
 
@@ -72,7 +74,9 @@ Lines injected by the boot scroll driver use CSS classes from `styles.css`:
 
 ## Telemetry section
 
-`#telemetry` (`s-telemetry`) — 6-card grid (`tlm-grid`) with these data-metric values: `cpu`, `mem`, `net`, `disk`, `temp`, plus a stats card. The primary CPU card (`tlm-primary`) spans 3 columns and holds an SVG sparkline. Metrics are currently simulated — to wire to a real backend, replace the `update()` function in IIFE 12 with a `fetch` call to a JSON endpoint and map response fields to `[data-tlm-val]` elements. Log lines are injected as `<span class="ll {level}">` inside `#tlmLog`.
+`#telemetry` (`s-telemetry`) — 6-card grid (`tlm-grid`) with these data-metric values: `cpu`, `mem`, `net`, `disk`, `temp`, plus a stats card. The primary CPU card (`tlm-primary`) spans 3 columns and holds an SVG sparkline. **Live data** is fetched from `https://api.bytefort.xyz/metrics` every 2.2s; the `update()` function in IIFE 12 falls back to simulated drift if the fetch fails. Response fields map to `[data-tlm-val]` elements. Log lines are injected as `<span class="ll {level}">` inside `#tlmLog`.
+
+Hardware baseline: Dell PowerEdge R720 · 2× Xeon E5-2650 · 64GB DDR3 ECC · 4.76TB VMFS. Seed state in IIFE 12: `cpu: 3, mem: 43, disk: 3.48, diskTotal: 4.76`.
 
 ## Timeline section
 
@@ -94,7 +98,12 @@ Lines injected by the boot scroll driver use CSS classes from `styles.css`:
 
 Each `.svc-card` carries `data-category="media|infrastructure|network"`. The JS filter and CSS theming both read this. The `.svc-icon` and `.svc-badge` inside carry `data-cat="..."` which drives `--cat-color` via CSS `:has()`.
 
-Cards are normally `<a>` tags (whole card is a link). If a card needs a picker instead of a single URL, use `<div class="svc-card svc-card--modal" data-modal="<id>">` — the modal IIFE uses document-level delegation to catch clicks. The modal itself uses `visibility: hidden` / `.is-open` class toggle; **never use `display: none` + `requestAnimationFrame` for modal open transitions** — the browser batches them into the same paint frame and the transition doesn't fire.
+Cards are normally `<a>` tags (whole card is a link). If a card needs a picker instead of a single URL, use `<div class="svc-card svc-card--modal" data-modal="<id>">` — the modal IIFE uses document-level delegation to catch clicks. The modal itself uses `visibility: hidden` / `.is-open` class toggle.
+
+Modal CSS constraints:
+- **Never** use `display: none` + `requestAnimationFrame` for open transitions — the browser batches them into the same paint frame and the transition doesn't fire.
+- **Never** use `backdrop-filter` on the modal backdrop — causes a Safari stacking context bug where the element paints above higher z-index siblings (e.g. the secret terminal at z-index 9000).
+- **Never** use `inset: 0` shorthand or `min()`/`max()` CSS functions — Cloudflare's CSS minifier can strip them; use explicit `top/right/bottom/left` and `width + max-width` instead.
 
 Current service count: **14** (Dashboard, Jellyfin, Jellyseerr, Prowlarr, Nginx Proxy Manager, qBittorrent, Radarr, Sonarr, VMware, WeTTY, Grafana, Safe, Speed Test, Status). Update `data-count` on `#hero .hs-num` and `.cta-stat-n`, the homelab panel `[ N ONLINE ]` label, and `.hl-svc-grid` entries whenever services are added or removed.
 
@@ -105,3 +114,14 @@ IIFEs 0f, 3 (hero canvas), 4 (typing animation), and 12 (telemetry) check `match
 ## Custom cursor notes
 
 The cursor is only active on `(hover: hover) and (pointer: fine)` devices (not touch). CSS sets `cursor: none` on `body, a, button` inside that media query. Both `#curDot` and `#curRing` use `position: fixed; top: 0; left: 0` anchored at origin — positioning is done entirely via `transform: translate(x, y) translate(-50%, -50%)` so centering stays correct even when ring size transitions.
+
+## Deployment
+
+Served via **Cloudflare Tunnel** (zero open ports) behind **Cloudflare CDN**. Changes pushed to `main` on GitHub are live, but CSS/JS assets are edge-cached — after any `styles.css` or `script.js` change, purge the cache: Cloudflare dashboard → bytefort.xyz → **Caching → Overview → Purge Cache → Purge Everything**.
+
+**Content Security Policy** is set via `<meta http-equiv="Content-Security-Policy">` in `index.html` (no Nginx config available). Current policy allows:
+- `style-src`: self + `unsafe-inline` + Google Fonts
+- `script-src`: self + `https://static.cloudflareinsights.com`
+- `connect-src`: self + `https://api.bytefort.xyz` + `https://cloudflareinsights.com`
+
+If a new external resource is added (font, script, fetch target), update the CSP meta tag or it will be blocked silently in the browser console.
