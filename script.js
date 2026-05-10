@@ -887,6 +887,7 @@
     term.classList.add('open');
     term.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    document.querySelectorAll('.svc-modal').forEach(m => m.style.visibility = 'hidden');
     setTimeout(() => input.focus(), 350);
     if (!body.children.length) {
       printLines([
@@ -902,6 +903,7 @@
     term.classList.remove('open');
     term.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    document.querySelectorAll('.svc-modal').forEach(m => m.style.visibility = '');
   }
 
   input.addEventListener('keydown', e => {
