@@ -802,17 +802,53 @@
     ];
   }
 
+  function vimEgg() {
+    return [
+      [''],
+      ['<d>~                                                        </d>'],
+      ['<d>~              VIM - Vi IMproved 9.0                     </d>'],
+      ['<d>~                  by Bram Moolenaar                     </d>'],
+      ['<d>~                                                        </d>'],
+      ['<g>you are now trapped in vim.</g>'],
+      ['<d>type  :q!  and press Enter to escape  (good luck)</d>'],
+      [''],
+    ];
+  }
+
+  const FORTUNES = [
+    ['<d>"The quieter you become, the more you can hear."</d>'],
+    ['<d>"Complexity is the enemy of security."</d>  <c>— Bruce Schneier</c>'],
+    ['<d>"Talk is cheap. Show me the code."</d>  <c>— Linus Torvalds</c>'],
+    ['<d>"A ship in port is safe, but that\'s not what ships are for."</d>  <c>— Grace Hopper</c>'],
+    ['<d>"It\'s not a bug, it\'s an undocumented feature."</d>'],
+    ['<d>"Any sufficiently advanced technology is indistinguishable from magic."</d>  <c>— Arthur C. Clarke</c>'],
+    ['<d>"The best way to predict the future is to invent it."</d>  <c>— Alan Kay</c>'],
+    ['<d>"Simplicity is prerequisite for reliability."</d>  <c>— Dijkstra</c>'],
+  ];
+
   const CMDS = {
     help: () => [
-      ['<c>available commands</c>'],
-      ['  <g>neofetch</g>   system overview'],
-      ['  <g>uptime</g>     server uptime'],
-      ['  <g>services</g>   list all services'],
-      ['  <g>ping</g>       ping bytefort.xyz'],
-      ['  <g>whoami</g>     current user'],
-      ['  <g>ls</g>         list directory'],
-      ['  <g>clear</g>      clear terminal'],
-      ['  <g>exit</g>       close terminal'],
+      ['<c>system</c>'],
+      ['  <g>neofetch</g>    system overview        <g>uname</g>      kernel info'],
+      ['  <g>uptime</g>      server uptime          <g>date</g>       current time'],
+      ['  <g>df</g>          disk usage             <g>free</g>       memory usage'],
+      ['  <g>top</g>         process list           <g>ip addr</g>    network info'],
+      [''],
+      ['<c>services & containers</c>'],
+      ['  <g>services</g>    list all services      <g>docker ps</g>  running containers'],
+      [''],
+      ['<c>network</c>'],
+      ['  <g>ping</g>        ping bytefort.xyz      <g>traceroute</g> trace hops'],
+      ['  <g>speedtest</g>   bandwidth result       <g>curl</g>       fetch a URL'],
+      [''],
+      ['<c>files</c>'],
+      ['  <g>ls</g>          list directory         <g>whoami</g>     current user'],
+      [''],
+      ['<c>fun</c>'],
+      ['  <g>fortune</g>     random wisdom          <g>vim</g>        text editor'],
+      ['  <g>sudo</g>        escalate privs         <g>matrix</g>     ???'],
+      [''],
+      ['  <g>clear</g>  /  <g>exit</g>  /  <g>q</g>'],
       [''],
     ],
     neofetch,
@@ -821,7 +857,62 @@
       return [[` up ${d} days,  load average: 0.42, 0.38, 0.31`]];
     },
     whoami: () => [['ayussh']],
+    date:   () => [[new Date().toString()]],
+    uname:  (a) => a[0] === '-a'
+      ? [['Linux bytefort 5.15.0-91-generic #101-Ubuntu SMP x86_64 GNU/Linux']]
+      : [['Linux']],
+
+    df: () => [
+      ['<d>Filesystem              Size    Used   Avail  Use%  Mounted on</d>'],
+      ['/dev/sda1              119G    18.2G  95.1G   16%  /'],
+      ['<c>vmfs/datastore1        4.76T   3.48T  1.28T   73%  /vmfs/volumes/datastore1</c>'],
+      ['tmpfs                   32G       0B    32G    0%   /dev/shm'],
+    ],
+
+    free: () => {
+      const usedRaw = parseFloat(liveVal('#tlmMemSub') || '27.5') || 27.5;
+      const total = 64, free = (total - usedRaw - 4.8).toFixed(1);
+      return [
+        ['<d>               total       used       free     buff/cache   available</d>'],
+        [`<c>Mem:</c>        ${total}G     ${usedRaw.toFixed(1)}G      ${free}G        4.8G         ${(parseFloat(free) - 0.2).toFixed(1)}G`],
+        ['<c>Swap:</c>       16G        0B         16G'],
+      ];
+    },
+
+    top: () => {
+      const cpu = parseFloat(liveVal('.tlm-card[data-metric="cpu"] [data-tlm-val]') || '3');
+      const idle = Math.max(0, 96 - cpu).toFixed(1);
+      const t = new Date().toLocaleTimeString();
+      const d = liveVal('#uptimeDays');
+      return [
+        [`<d>top - ${t}  up ${d} days,  1 user,  load: 0.42, 0.38, 0.31</d>`],
+        [`<d>Tasks: 47 total,  1 running,  46 sleeping</d>`],
+        [`<d>%Cpu: <c>${cpu}%</c> us,  0.3% sy,  ${idle}% id</d>`],
+        [''],
+        ['<d>  PID  USER      %CPU  %MEM  COMMAND</d>'],
+        ['<c> 1842  root       2.3   1.2  vmware-vmx</c>'],
+        ['  1203  ayussh     1.1   0.8  jellyfin'],
+        ['  2041  ayussh     0.8   0.4  sonarr'],
+        ['  2089  ayussh     0.6   0.3  radarr'],
+        ['  3012  root       0.3   0.1  nginx'],
+        ['  3156  ayussh     0.2   0.2  grafana'],
+        ['  4201  ayussh     0.1   0.1  qbittorrent'],
+        [''],
+      ];
+    },
+
+    ip: (a) => {
+      if (a[0] !== 'addr') return [['<e>usage: ip addr</e>']];
+      return [
+        ['<c>1: lo</c>         127.0.0.1/8'],
+        ['<c>2: eno1</c>       192.168.1.10/24   brd 192.168.1.255'],
+        ['<c>3: vmk0</c>       10.0.0.1/24       brd 10.0.0.255  (management)'],
+        ['<c>4: docker0</c>    172.17.0.1/16'],
+      ];
+    },
+
     ls: () => [['<c>docker-compose/</c>  <c>media/</c>  <c>backups/</c>  <c>scripts/</c>  <d>.env</d>  <d>.ssh/</d>  README.md']],
+
     services: () => [
       ['<c>ACTIVE SERVICES (14/14)</c>'],
       ['  <g>●</g> Dashboard      dash.bytefort.xyz'],
@@ -839,6 +930,28 @@
       ['  <g>●</g> VMware         vmware.bytefort.xyz'],
       ['  <g>●</g> WeTTY          wetty1/2.bytefort.xyz'],
     ],
+
+    docker: (a) => {
+      if (a[0] !== 'ps') return [['<e>usage: docker ps</e>']];
+      const d = liveVal('#uptimeDays');
+      return [
+        ['<d>CONTAINER ID   IMAGE                        STATUS         NAMES</d>'],
+        [`<c>a1b2c3d4e5f6</c>   linuxserver/jellyfin         Up ${d} days    jellyfin`],
+        [`<c>b2c3d4e5f6a1</c>   sctx/overseerr               Up ${d} days    jellyseerr`],
+        [`<c>c3d4e5f6a1b2</c>   linuxserver/radarr            Up ${d} days    radarr`],
+        [`<c>d4e5f6a1b2c3</c>   linuxserver/sonarr            Up ${d} days    sonarr`],
+        [`<c>e5f6a1b2c3d4</c>   linuxserver/prowlarr          Up ${d} days    prowlarr`],
+        [`<c>f6a1b2c3d4e5</c>   linuxserver/qbittorrent       Up ${d} days    qbittorrent`],
+        [`<c>a2b3c4d5e6f7</c>   grafana/grafana               Up ${d} days    grafana`],
+        [`<c>b3c4d5e6f7a2</c>   jc21/nginx-proxy-manager      Up ${d} days    npm`],
+        [`<c>c4d5e6f7a2b3</c>   vaultwarden/server            Up ${d} days    vaultwarden`],
+        [`<c>d5e6f7a2b3c4</c>   louislam/uptime-kuma          Up ${d} days    status`],
+        [`<c>e6f7a2b3c4d5</c>   openspeedtest/server          Up ${d} days    speedtest`],
+        [`<c>f7a2b3c4d5e6</c>   wettyoss/wetty                Up ${d} days    wetty1`],
+        [`<c>a3b4c5d6e7f8</c>   wettyoss/wetty                Up ${d} days    wetty2`],
+      ];
+    },
+
     ping: () => {
       const lines = [['PING bytefort.xyz (104.21.x.x): 56 data bytes']];
       for (let i = 0; i < 4; i++) {
@@ -849,6 +962,75 @@
       lines.push(['<g>4 packets transmitted, 4 received, 0% packet loss</g>']);
       return lines;
     },
+
+    traceroute: (a) => {
+      const host = a[0] || 'bytefort.xyz';
+      return [
+        [`traceroute to ${host} (104.21.x.x), 30 hops max, 60 byte packets`],
+        [' 1  192.168.1.1       0.412 ms  0.389 ms  0.401 ms'],
+        [' 2  10.x.x.1          3.211 ms  3.198 ms  3.204 ms'],
+        [' 3  * * *'],
+        [' 4  * * *'],
+        [` 5  <c>104.21.x.x</c>        8.334 ms  8.301 ms  <g>${host}</g>`],
+      ];
+    },
+
+    speedtest: () => [
+      ['<d>Speedtest by Ookla</d>'],
+      [''],
+      ['  Server:   Cloudflare — Sydney, AU'],
+      ['  Ping:     <c>8 ms</c>'],
+      ['  Download: <g>232.4 Mbps</g>  ████████████████████'],
+      ['  Upload:   <g>229.8 Mbps</g>  ███████████████████░'],
+      [''],
+      ['  bytefort.xyz/speedtest'],
+    ],
+
+    curl: (a) => {
+      const url = a.find(x => x.includes('.'));
+      if (!url) return [['<e>curl: no URL specified</e>']];
+      if (/ifconfig|icanhazip|ipinfo|myip/i.test(url)) {
+        return [['104.21.x.x  <c>(behind Cloudflare — not the real IP)</c>']];
+      }
+      return [['<e>curl: unsupported in this terminal</e>']];
+    },
+
+    sudo: (a) => {
+      if (a[0] === 'rm') {
+        return [
+          ['<e>nice try.</e>'],
+          ['<d>incident logged. authorities notified. (jk)</d>'],
+        ];
+      }
+      return [
+        ['<e>[sudo] password for ayussh:</e>'],
+        ['<e>ayussh is not in the sudoers file. This incident will be reported.</e>'],
+      ];
+    },
+
+    rm: (a) => {
+      if (a.includes('-rf') && (a.includes('/') || a.includes('*'))) {
+        return [
+          ['<e>rm: it is dangerous to operate recursively on /</e>'],
+          ['<e>rm: use --no-preserve-root to override this protection</e>'],
+          ['<d>(not today)</d>'],
+        ];
+      }
+      return [['<e>rm: missing operand</e>']];
+    },
+
+    vim:     vimEgg,
+    vi:      vimEgg,
+    ':q!':   () => [['<g>you escaped vim. impressive.</g>']],
+    ':q':    () => [['<e>E37: No write since last change (add ! to override)</e>']],
+
+    fortune: () => [FORTUNES[Math.floor(Math.random() * FORTUNES.length)]],
+
+    matrix: () => {
+      document.dispatchEvent(new CustomEvent('bytefort:matrix'));
+      return [['<g>wake up, neo...</g>']];
+    },
+
     clear: () => { body.innerHTML = ''; return []; },
     exit:  () => { closeTerm(); return []; },
     q:     () => { closeTerm(); return []; },
@@ -870,12 +1052,14 @@
   }
 
   function run(raw) {
-    const cmd = raw.trim().toLowerCase().split(' ')[0];
+    const parts = raw.trim().split(/\s+/);
+    const cmd   = parts[0].toLowerCase();
+    const args  = parts.slice(1).map(a => a.toLowerCase());
     if (!cmd) return;
     renderLine(`<span class="st-c">ayussh@bytefort:~$</span> ${raw.trim()}`);
     if (CMDS[cmd]) {
-      const out = CMDS[cmd]();
-      if (out.length) printLines(out);
+      const out = CMDS[cmd](args);
+      if (out && out.length) printLines(out);
     } else {
       renderLine(`<span class="st-e">bash: ${cmd}: command not found</span>`);
     }
@@ -942,6 +1126,8 @@
     if (seq.length > KONAMI.length) seq.shift();
     if (seq.join() === KONAMI.join() && !running) { seq = []; startRain(); }
   });
+
+  document.addEventListener('bytefort:matrix', () => { if (!running) startRain(); });
 
   function startRain() {
     running = true;
