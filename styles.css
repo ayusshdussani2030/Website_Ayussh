@@ -1002,8 +1002,9 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 .svc-modal {
   position: fixed; inset: 0; z-index: 900;
   display: flex; align-items: center; justify-content: center;
+  visibility: hidden; pointer-events: none;
 }
-.svc-modal[hidden] { display: none; }
+.svc-modal.is-open { visibility: visible; pointer-events: auto; }
 .svc-modal.is-open .svc-modal-backdrop { opacity: 1; }
 .svc-modal.is-open .svc-modal-panel { opacity: 1; transform: translateY(0) scale(1); }
 
