@@ -1871,7 +1871,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 }
 .tl-desc .mono { color: var(--cyan); font-size: 0.85em; padding: 0 0.25rem; background: rgba(103,232,249,0.06); border-radius: 3px; }
 
-/* ─── Secret Terminal ─────────────────────────────────────── */
+/* --- Secret Terminal ---------------------------------------- */
 .secret-term {
   position: fixed;
   bottom: 0; left: 0; right: 0;
@@ -1933,7 +1933,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 .st-e { color: #f87171; }
 .st-p { color: var(--purple); }
 
-/* ─── Matrix Rain ─────────────────────────────────────────── */
+/* --- Matrix Rain -------------------------------------------- */
 .matrix-rain {
   position: fixed; inset: 0;
   z-index: 99999;
