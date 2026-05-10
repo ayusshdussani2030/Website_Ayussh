@@ -17,7 +17,7 @@ No build step, no bundler, no compilation. Files are served as-is.
 | File | Role |
 |------|------|
 | `index.html` | All markup and content. Single-page, anchor-based routing: `#hero` `#boot` `#homelab` `#services` `#telemetry` `#timeline` `#ailab` `#network` `#cta`. |
-| `styles.css` | All styling (~1753 lines). CSS custom properties in `:root` — change design tokens there first. No preprocessor. |
+| `styles.css` | All styling (~1878 lines). CSS custom properties in `:root` — change design tokens there first. No preprocessor. |
 | `script.js` | Self-contained IIFEs (see below). |
 | `favicon.svg` | SVG favicon — dark rounded square with `bf` in green. |
 
@@ -36,9 +36,9 @@ Service card category theming uses `:has([data-cat="..."])` to set `--cat-color`
 
 0. **Boot intro overlay** — fills `#biBar` and cycles status text over 1.7s via rAF, then fades `.boot-intro` out and removes it.
 0b. **Custom cursor** — dot (`#curDot`) follows mouse exactly; ring (`#curRing`) lerps behind via a continuous rAF loop at 0.18 factor. Adds `.hover` class to ring over `a/button/.svc-card`. Only activates when `(hover: hover) and (pointer: fine)` matches.
-0c. **Live uptime counter** — sets `#uptimeDays` to days elapsed since `2024-01-15`.
+0c. **Live uptime counter** — sets `#uptimeDays` to days elapsed since `2024-03-01`.
 0d. **Scroll to top** — shows `#toTop` after 700px scroll; smooth-scrolls to top on click.
-0e. **Clipboard copy** — clicking `#sshCmd` writes `ssh ayussh@bytefort.xyz` to clipboard; shows `#toast` for 2.2s with fallback text on clipboard API failure.
+0e. **Clipboard copy** — clicking `#sshCmd` writes `ping bytefort.xyz` to clipboard; shows `#toast` for 2.2s with fallback text on clipboard API failure.
 0f. **Text scramble** — on intersection of `.section-tag` elements, scrambles characters via rAF using `CHARS = '!<>-_\\/[]{}=+*^?#@~01'` before resolving to real text. No-ops on `prefers-reduced-motion`.
 0g. **Click ripple** — disabled in current version.
 1. **Scroll progress bar** — updates `#progressBar` width% on scroll.
@@ -53,6 +53,7 @@ Service card category theming uses `:has([data-cat="..."])` to set `--cat-color`
 10. **3D card hover** — `mousemove` on `.svc-card` applies `perspective(800px) rotateX/Y`.
 11. **Service filter** — `.filter-btn[data-filter]` toggles `.hidden` on `.svc-card[data-category]`.
 12. **Live telemetry** — `IntersectionObserver` starts on `#telemetry`; simulates CPU/mem/net/temp/req metrics with drift. Updates every 2.2s. Draws sparklines via SVG path generation. Tails a fake log into `#tlmLog` every 1.4s. All animation skipped on `prefers-reduced-motion`.
+13. **WeTTY modal** — document-level click delegation on `[data-modal="wetty"]` opens `#wettyModal`. Uses `visibility`/`pointer-events` toggle (not `display`) so CSS transitions fire correctly. Closes on backdrop click, close button, or `Escape`.
 
 ## Sticky scroll sections
 
@@ -92,6 +93,10 @@ Lines injected by the boot scroll driver use CSS classes from `styles.css`:
 ## Service cards
 
 Each `.svc-card` carries `data-category="media|infrastructure|network"`. The JS filter and CSS theming both read this. The `.svc-icon` and `.svc-badge` inside carry `data-cat="..."` which drives `--cat-color` via CSS `:has()`.
+
+Cards are normally `<a>` tags (whole card is a link). If a card needs a picker instead of a single URL, use `<div class="svc-card svc-card--modal" data-modal="<id>">` — the modal IIFE uses document-level delegation to catch clicks. The modal itself uses `visibility: hidden` / `.is-open` class toggle; **never use `display: none` + `requestAnimationFrame` for modal open transitions** — the browser batches them into the same paint frame and the transition doesn't fire.
+
+Current service count: **14** (Dashboard, Jellyfin, Jellyseerr, Prowlarr, Nginx Proxy Manager, qBittorrent, Radarr, Sonarr, VMware, WeTTY, Grafana, Safe, Speed Test, Status). Update `data-count` on `#hero .hs-num` and `.cta-stat-n`, the homelab panel `[ N ONLINE ]` label, and `.hl-svc-grid` entries whenever services are added or removed.
 
 ## Reduced-motion guard
 
