@@ -785,9 +785,9 @@
     document.body.style.overflow = '';
   }
 
-  document.querySelectorAll('[data-modal="wetty"]').forEach(trigger => {
-    trigger.addEventListener('click', open);
-    trigger.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+  document.addEventListener('click', e => { if (e.target.closest('[data-modal="wetty"]')) open(); });
+  document.addEventListener('keydown', e => {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.closest('[data-modal="wetty"]')) { e.preventDefault(); open(); }
   });
 
   closeBtn.addEventListener('click', close);
