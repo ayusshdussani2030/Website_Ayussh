@@ -619,7 +619,7 @@
     <div class="section-header reveal-up">
       <div class="section-tag mono">// 02b LIVE TELEMETRY</div>
       <h2 class="section-heading">System <em>Vitals.</em></h2>
-      <p class="section-lead">Real-time pulse of the fortress. Updated every 2 seconds straight from the bare metal.</p>
+      <p class="section-lead">Simulated telemetry seeded from real hardware specs. Wire up <code>api.bytefort.xyz/metrics</code> to go live.</p>
     </div>
 
     <div class="tlm-grid reveal-up">
@@ -629,7 +629,7 @@
           <span class="tlm-label mono">CPU LOAD</span>
           <span class="tlm-pill mono"><span class="status-dot"></span> live</span>
         </div>
-        <div class="tlm-big mono"><span data-tlm-val>14</span><span class="tlm-unit">%</span></div>
+        <div class="tlm-big mono"><span data-tlm-val>3</span><span class="tlm-unit">%</span></div>
         <div class="tlm-sub mono">2× Xeon E5-2650 · 32c/64t · 2.00 GHz</div>
         <svg class="tlm-spark" viewBox="0 0 240 60" preserveAspectRatio="none" data-tlm-spark>
           <defs>
@@ -648,11 +648,11 @@
       <div class="tlm-card" data-metric="mem">
         <div class="tlm-head">
           <span class="tlm-label mono">MEMORY</span>
-          <span class="tlm-pill mono" id="tlmMemPill">62.1G</span>
+          <span class="tlm-pill mono" id="tlmMemPill">64G</span>
         </div>
-        <div class="tlm-big mono"><span data-tlm-val>38</span><span class="tlm-unit">%</span></div>
-        <div class="tlm-bar"><div class="tlm-bar-fill" data-tlm-fill style="width:38%"></div></div>
-        <div class="tlm-sub mono" id="tlmMemSub">23.6 / 64 GB DDR3 ECC</div>
+        <div class="tlm-big mono"><span data-tlm-val>43</span><span class="tlm-unit">%</span></div>
+        <div class="tlm-bar"><div class="tlm-bar-fill" data-tlm-fill style="width:43%"></div></div>
+        <div class="tlm-sub mono" id="tlmMemSub">27.5 / 63.96 GB DDR3 ECC</div>
       </div>
 
       <!-- Net -->
@@ -676,9 +676,9 @@
           <span class="tlm-label mono">STORAGE</span>
           <span class="tlm-pill mono">VMFS</span>
         </div>
-        <div class="tlm-big mono"><span data-tlm-val>2.8</span><span class="tlm-unit">TB</span></div>
-        <div class="tlm-bar"><div class="tlm-bar-fill" data-tlm-fill style="width:58%; background: linear-gradient(90deg, var(--cyan), var(--purple));"></div></div>
-        <div class="tlm-sub mono" id="tlmDiskSub">2.8 / 4.8 TB used</div>
+        <div class="tlm-big mono"><span data-tlm-val>3.48</span><span class="tlm-unit">TB</span></div>
+        <div class="tlm-bar"><div class="tlm-bar-fill" data-tlm-fill style="width:73%; background: linear-gradient(90deg, var(--cyan), var(--purple));"></div></div>
+        <div class="tlm-sub mono" id="tlmDiskSub">3.48 / 4.76 TB used</div>
       </div>
 
       <!-- Temp -->

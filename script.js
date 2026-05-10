@@ -571,8 +571,8 @@
 
   // State — temp:null means API is live but no sensor available → show "--"
   const state = {
-    cpu: 14, mem: 38, netUp: 4.2, netDn: 18.7,
-    disk: 2.8, diskTotal: 4.8, diskFrag: null,
+    cpu: 3, mem: 43, netUp: 4.2, netDn: 18.7,
+    disk: 3.48, diskTotal: 4.76, diskFrag: null,
     temp: 42, req: 284,
   };
   const cards = sect.querySelectorAll('.tlm-card');
