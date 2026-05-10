@@ -332,7 +332,7 @@
   const burger   = document.getElementById('hamburger');
   const menu     = document.getElementById('mobileMenu');
   const mLinks   = document.querySelectorAll('.mobile-link');
-  const sections = ['boot', 'homelab', 'services', 'ailab', 'network'];
+  const sections = ['boot', 'homelab', 'services', 'telemetry', 'timeline', 'ailab', 'network'];
 
   function updateActive() {
     const sp    = window.scrollY + 160;
@@ -390,7 +390,7 @@
     { cls: 'ok',   text: '[ OK ] VMware ESXi 6.5 hypervisor loaded' },
     { cls: 'ok',   text: '[ OK ] Network interface eth0: ACTIVE' },
     { cls: 'ok',   text: '[ OK ] Cloudflare Zero Trust tunnel: CONNECTED' },
-    { cls: 'ok',   text: '[ OK ] ZFS storage pool: 8.0 TiB available' },
+    { cls: 'ok',   text: '[ OK ] VMFS storage pool: 4.8 TiB available' },
     { cls: 'ok',   text: '[ OK ] Docker daemon: running (14 containers)' },
     { cls: 'ok',   text: '[ OK ] Starting service containers...' },
     { cls: 'info', text: '  → dash.bytefort.xyz        [Dashboard]    ONLINE' },
@@ -572,7 +572,7 @@
   // State — temp:null means API is live but no sensor available → show "--"
   const state = {
     cpu: 14, mem: 38, netUp: 4.2, netDn: 18.7,
-    disk: 2.8, diskTotal: 8, diskFrag: null,
+    disk: 2.8, diskTotal: 4.8, diskFrag: null,
     temp: 42, req: 284,
   };
   const cards = sect.querySelectorAll('.tlm-card');
