@@ -982,5 +982,22 @@
 </div>
 
 <script src="script.js"></script>
+
+<!-- Secret terminal easter egg (press `) -->
+<div id="secretTerm" class="secret-term" role="dialog" aria-hidden="true" aria-label="bytefort terminal">
+  <div class="st-bar">
+    <span class="st-dots"><span></span><span></span><span></span></span>
+    <span class="st-title mono">ayussh@bytefort:~</span>
+    <span class="st-hint mono">press ` or ESC to close</span>
+  </div>
+  <div class="st-body" id="stBody"></div>
+  <div class="st-foot">
+    <span class="st-prompt mono">ayussh@bytefort:~$&nbsp;</span>
+    <input class="st-input mono" id="stInput" type="text" autocomplete="off" spellcheck="false" aria-label="Terminal input" />
+  </div>
+</div>
+
+<!-- Matrix rain canvas (Konami code: ↑↑↓↓←→←→BA) -->
+<canvas id="matrixRain" class="matrix-rain" aria-hidden="true"></canvas>
 </body>
 </html>

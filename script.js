@@ -768,6 +768,221 @@
 })();
 
 
+/* ── Secret Terminal (press `) ──────────────────────────── */
+(() => {
+  const term  = document.getElementById('secretTerm');
+  const body  = document.getElementById('stBody');
+  const input = document.getElementById('stInput');
+  if (!term || !body || !input) return;
+
+  let isOpen = false;
+  const hist = []; let histIdx = -1;
+
+  function liveVal(selector) {
+    return document.querySelector(selector)?.textContent?.trim() || '—';
+  }
+
+  function neofetch() {
+    const cpu  = liveVal('.tlm-card[data-metric="cpu"] [data-tlm-val]');
+    const mem  = liveVal('#tlmMemSub');
+    const disk = liveVal('#tlmDiskSub');
+    const days = liveVal('#uptimeDays');
+    return [
+      ['   ██████╗ ███████╗      <c>ayussh</c><d> @ </d><c>bytefort.xyz</c>'],
+      ['   ██╔══██╗██╔════╝      <d>─────────────────────────────────</d>'],
+      [`   ██████╔╝█████╗        <d>Host    </d> Dell PowerEdge R720`],
+      [`   ██╔══██╗██╔══╝        <d>OS      </d> Ubuntu 22.04 LTS x86_64`],
+      [`   ██████╔╝██║           <d>Kernel  </d> ESXi 6.5 (Type-1 hypervisor)`],
+      [`   ╚═════╝ ╚═╝           <d>CPU     </d> 2× Xeon E5-2650 · 32c/64t · <c>${cpu}%</c>`],
+      [`           <c>.xyz</c>          <d>Memory  </d> ${mem} DDR3 ECC`],
+      [`                         <d>Storage </d> ${disk} VMFS`],
+      [`                         <d>Uptime  </d> <g>${days} days</g>`],
+      [`                         <d>Services</d> <g>14 online ●●●●●●●●●●●●●●</g>`],
+      [''],
+    ];
+  }
+
+  const CMDS = {
+    help: () => [
+      ['<c>available commands</c>'],
+      ['  <g>neofetch</g>   system overview'],
+      ['  <g>uptime</g>     server uptime'],
+      ['  <g>services</g>   list all services'],
+      ['  <g>ping</g>       ping bytefort.xyz'],
+      ['  <g>whoami</g>     current user'],
+      ['  <g>ls</g>         list directory'],
+      ['  <g>clear</g>      clear terminal'],
+      ['  <g>exit</g>       close terminal'],
+      [''],
+    ],
+    neofetch,
+    uptime: () => {
+      const d = liveVal('#uptimeDays');
+      return [[` up ${d} days,  load average: 0.42, 0.38, 0.31`]];
+    },
+    whoami: () => [['ayussh']],
+    ls: () => [['<c>docker-compose/</c>  <c>media/</c>  <c>backups/</c>  <c>scripts/</c>  <d>.env</d>  <d>.ssh/</d>  README.md']],
+    services: () => [
+      ['<c>ACTIVE SERVICES (14/14)</c>'],
+      ['  <g>●</g> Dashboard      dash.bytefort.xyz'],
+      ['  <g>●</g> Jellyfin       jellyfin.bytefort.xyz'],
+      ['  <g>●</g> Jellyseerr     jellyseerr.bytefort.xyz'],
+      ['  <g>●</g> Radarr         radarr.bytefort.xyz'],
+      ['  <g>●</g> Sonarr         sonarr.bytefort.xyz'],
+      ['  <g>●</g> Prowlarr       prowlarr.bytefort.xyz'],
+      ['  <g>●</g> qBittorrent    qbit.bytefort.xyz'],
+      ['  <g>●</g> Grafana        grafana.bytefort.xyz'],
+      ['  <g>●</g> Safe           safe.bytefort.xyz'],
+      ['  <g>●</g> Speed Test     speedtest.bytefort.xyz'],
+      ['  <g>●</g> Status         status.bytefort.xyz'],
+      ['  <g>●</g> Nginx PM       proxy.bytefort.xyz'],
+      ['  <g>●</g> VMware         vmware.bytefort.xyz'],
+      ['  <g>●</g> WeTTY          wetty1/2.bytefort.xyz'],
+    ],
+    ping: () => {
+      const lines = [['PING bytefort.xyz (104.21.x.x): 56 data bytes']];
+      for (let i = 0; i < 4; i++) {
+        const ms = (Math.random() * 8 + 10).toFixed(3);
+        lines.push([`64 bytes from bytefort.xyz: icmp_seq=${i} ttl=55 time=<c>${ms} ms</c>`]);
+      }
+      lines.push(['--- bytefort.xyz ping statistics ---']);
+      lines.push(['<g>4 packets transmitted, 4 received, 0% packet loss</g>']);
+      return lines;
+    },
+    clear: () => { body.innerHTML = ''; return []; },
+    exit:  () => { closeTerm(); return []; },
+    q:     () => { closeTerm(); return []; },
+  };
+
+  function renderLine(html) {
+    const el = document.createElement('span');
+    el.className = 'st-line';
+    el.innerHTML = html
+      .replace(/<c>/g, '<span class="st-c">').replace(/<\/c>/g, '</span>')
+      .replace(/<g>/g, '<span class="st-g">').replace(/<\/g>/g, '</span>')
+      .replace(/<d>/g, '<span class="st-d">').replace(/<\/d>/g, '</span>');
+    body.appendChild(el);
+  }
+
+  function printLines(lines) {
+    lines.forEach(([html = '']) => renderLine(html));
+    body.scrollTop = body.scrollHeight;
+  }
+
+  function run(raw) {
+    const cmd = raw.trim().toLowerCase().split(' ')[0];
+    if (!cmd) return;
+    renderLine(`<span class="st-c">ayussh@bytefort:~$</span> ${raw.trim()}`);
+    if (CMDS[cmd]) {
+      const out = CMDS[cmd]();
+      if (out.length) printLines(out);
+    } else {
+      renderLine(`<span class="st-e">bash: ${cmd}: command not found</span>`);
+    }
+    body.scrollTop = body.scrollHeight;
+  }
+
+  function openTerm() {
+    isOpen = true;
+    term.classList.add('open');
+    term.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => input.focus(), 350);
+    if (!body.children.length) {
+      printLines([
+        ['<c>bytefort.xyz</c> — Digital Fortress Terminal  <d>[ type `help` for commands ]</d>'],
+        [''],
+      ]);
+      printLines(neofetch());
+    }
+  }
+
+  function closeTerm() {
+    isOpen = false;
+    term.classList.remove('open');
+    term.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const val = input.value;
+      input.value = '';
+      if (val.trim()) { hist.unshift(val); histIdx = -1; }
+      run(val);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (histIdx < hist.length - 1) input.value = hist[++histIdx];
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      histIdx > 0 ? input.value = hist[--histIdx] : (histIdx = -1, input.value = '');
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === '`') { e.preventDefault(); isOpen ? closeTerm() : openTerm(); }
+    if (e.key === 'Escape' && isOpen) closeTerm();
+  });
+})();
+
+
+/* ── Konami Code → Matrix Rain ──────────────────────────── */
+(() => {
+  const canvas = document.getElementById('matrixRain');
+  if (!canvas) return;
+  const ctx    = canvas.getContext('2d');
+  const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let seq = [], running = false;
+
+  document.addEventListener('keydown', e => {
+    seq.push(e.key);
+    if (seq.length > KONAMI.length) seq.shift();
+    if (seq.join() === KONAMI.join() && !running) { seq = []; startRain(); }
+  });
+
+  function startRain() {
+    running = true;
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    canvas.classList.add('on');
+
+    const CHARS = 'アイウエオカキクケコサシスセソ01ByTeForT!<>{}[]';
+    const cols  = Math.floor(canvas.width / 16);
+    const drops = Array(cols).fill(1);
+    let frames  = 0;
+
+    (function draw() {
+      if (!running) return;
+      frames++;
+      ctx.fillStyle = 'rgba(3,5,8,0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.font = '14px JetBrains Mono, monospace';
+
+      drops.forEach((y, i) => {
+        const bright = Math.random() > 0.95;
+        ctx.fillStyle = bright ? '#ffffff' : '#67e8f9';
+        ctx.fillText(CHARS[Math.floor(Math.random() * CHARS.length)], i * 16, y * 16);
+        if (y * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      });
+
+      if (frames < 200) {
+        requestAnimationFrame(draw);
+      } else {
+        canvas.style.transition = 'opacity 1.5s';
+        canvas.classList.remove('on');
+        setTimeout(() => {
+          running = false;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          canvas.style.transition = '';
+        }, 1500);
+      }
+    })();
+  }
+})();
+
+
 /* ── WeTTY instance picker modal ────────────────────────── */
 (() => {
   const modal = document.getElementById('wettyModal');

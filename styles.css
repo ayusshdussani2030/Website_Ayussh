@@ -1871,6 +1871,78 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 }
 .tl-desc .mono { color: var(--cyan); font-size: 0.85em; padding: 0 0.25rem; background: rgba(103,232,249,0.06); border-radius: 3px; }
 
+/* ─── Secret Terminal ─────────────────────────────────────── */
+.secret-term {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: min(480px, 70vh);
+  background: rgba(3, 5, 8, 0.97);
+  border-top: 1px solid var(--cyan);
+  box-shadow: 0 -24px 80px rgba(103, 232, 249, 0.07);
+  z-index: 9000;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(16px);
+}
+.secret-term.open { transform: translateY(0); }
+.st-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.st-dots { display: flex; gap: 6px; }
+.st-dots span { width: 12px; height: 12px; border-radius: 50%; }
+.st-dots span:nth-child(1) { background: #ff5f57; }
+.st-dots span:nth-child(2) { background: #febc2e; }
+.st-dots span:nth-child(3) { background: #28c840; }
+.st-title { color: var(--text-dim); font-size: 0.78rem; flex: 1; }
+.st-hint  { color: var(--text-dim); font-size: 0.7rem; opacity: 0.45; }
+.st-body  {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  line-height: 1.65;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-mid) transparent;
+}
+.st-foot {
+  display: flex;
+  align-items: center;
+  padding: 0.55rem 1rem;
+  border-top: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.st-prompt { color: var(--cyan); font-size: 0.78rem; white-space: nowrap; }
+.st-input  {
+  background: none; border: none; outline: none;
+  color: var(--text); font-size: 0.78rem;
+  font-family: 'JetBrains Mono', monospace;
+  flex: 1; caret-color: var(--cyan);
+}
+.st-line { display: block; white-space: pre; }
+.st-c { color: var(--cyan); }
+.st-g { color: var(--green); }
+.st-d { color: var(--text-dim); }
+.st-e { color: #f87171; }
+.st-p { color: var(--purple); }
+
+/* ─── Matrix Rain ─────────────────────────────────────────── */
+.matrix-rain {
+  position: fixed; inset: 0;
+  z-index: 99999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+.matrix-rain.on { opacity: 1; }
+
 @media (max-width: 600px) {
   .tl-track { padding-left: 1.5rem; }
   .tl-item { padding-left: 1.25rem; }
