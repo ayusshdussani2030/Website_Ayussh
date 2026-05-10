@@ -523,7 +523,7 @@
         </div>
       </a>
 
-      <a class="svc-card reveal-up" href="https://wetty1.bytefort.xyz" target="_blank" rel="noopener" data-category="infrastructure">
+      <div class="svc-card svc-card--modal reveal-up" data-category="infrastructure" data-modal="wetty" role="button" tabindex="0" aria-haspopup="dialog">
         <div class="svc-card-glow"></div>
         <div class="svc-card-top">
           <div class="svc-icon" data-cat="infrastructure">
@@ -534,10 +534,10 @@
         <h3 class="svc-name">WeTTY</h3>
         <p class="svc-desc">Browser-based SSH terminal. Full shell access from any device, no client software needed.</p>
         <div class="svc-footer">
-          <span class="svc-url mono">wetty1.bytefort.xyz <svg class="svc-arrow" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg></span>
+          <span class="svc-url mono">2 instances <svg class="svc-arrow" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg></span>
           <span class="svc-status mono"><span class="svc-dot"></span>Active</span>
         </div>
-      </a>
+      </div>
 
     </div>
   </div>
@@ -875,6 +875,41 @@
 
 <button id="toTop" class="to-top" aria-label="Back to top">↑</button>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<!-- WeTTY instance picker modal -->
+<div id="wettyModal" class="svc-modal" role="dialog" aria-modal="true" aria-label="Select WeTTY instance" hidden>
+  <div class="svc-modal-backdrop"></div>
+  <div class="svc-modal-panel">
+    <div class="svc-modal-header">
+      <div class="svc-icon" data-cat="infrastructure" style="width:28px;height:28px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 9l3 3-3 3M13 15h3"/></svg>
+      </div>
+      <div>
+        <p class="svc-modal-title">WeTTY</p>
+        <p class="svc-modal-sub mono">Select an instance</p>
+      </div>
+      <button class="svc-modal-close" aria-label="Close">✕</button>
+    </div>
+    <div class="svc-modal-options">
+      <a class="svc-modal-opt" href="https://wetty1.bytefort.xyz" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M9 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-4M15 3h6m0 0v6m0-6L10 14"/></svg>
+        <div>
+          <p class="svc-modal-opt-name">Services</p>
+          <p class="svc-modal-opt-url mono">wetty1.bytefort.xyz</p>
+        </div>
+        <svg class="svc-arrow svc-modal-arrow" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg>
+      </a>
+      <a class="svc-modal-opt" href="https://wetty2.bytefort.xyz" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M15 10l4.553-2.069A1 1 0 0121 8.87V15.13a1 1 0 01-1.447.9L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+        <div>
+          <p class="svc-modal-opt-name">Media</p>
+          <p class="svc-modal-opt-url mono">wetty2.bytefort.xyz</p>
+        </div>
+        <svg class="svc-arrow svc-modal-arrow" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>

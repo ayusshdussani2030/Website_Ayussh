@@ -766,3 +766,33 @@
     if (!reduced) setInterval(pushLog, 1400);
   }
 })();
+
+
+/* ── WeTTY instance picker modal ────────────────────────── */
+(() => {
+  const modal = document.getElementById('wettyModal');
+  if (!modal) return;
+  const backdrop = modal.querySelector('.svc-modal-backdrop');
+  const closeBtn = modal.querySelector('.svc-modal-close');
+
+  function open() {
+    modal.hidden = false;
+    requestAnimationFrame(() => modal.classList.add('is-open'));
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+    modal.addEventListener('transitionend', () => { modal.hidden = true; }, { once: true });
+  }
+
+  document.querySelectorAll('[data-modal="wetty"]').forEach(trigger => {
+    trigger.addEventListener('click', open);
+    trigger.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+  });
+
+  closeBtn.addEventListener('click', close);
+  backdrop.addEventListener('click', close);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) close(); });
+})();

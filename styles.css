@@ -996,6 +996,83 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   box-shadow: 0 0 6px var(--green);
 }
 .svc-card.hidden { display: none; }
+.svc-card--modal { cursor: pointer; }
+
+/* ---- WeTTY instance picker modal ---- */
+.svc-modal {
+  position: fixed; inset: 0; z-index: 900;
+  display: flex; align-items: center; justify-content: center;
+}
+.svc-modal[hidden] { display: none; }
+.svc-modal.is-open .svc-modal-backdrop { opacity: 1; }
+.svc-modal.is-open .svc-modal-panel { opacity: 1; transform: translateY(0) scale(1); }
+
+.svc-modal-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(5,7,11,0.8);
+  backdrop-filter: blur(6px);
+  opacity: 0; transition: opacity 0.22s var(--ease);
+}
+.svc-modal-panel {
+  position: relative; z-index: 1;
+  width: min(380px, calc(100vw - 2rem));
+  background: var(--bg-1);
+  border: 1px solid var(--line-mid);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 32px 80px -20px rgba(0,0,0,0.8), 0 0 0 1px var(--line-mid), 0 0 40px -15px var(--cyan);
+  opacity: 0; transform: translateY(12px) scale(0.97);
+  transition: opacity 0.22s var(--ease), transform 0.22s var(--ease);
+}
+.svc-modal-header {
+  display: flex; align-items: center; gap: 0.9rem;
+  padding: 1.2rem 1.2rem 1rem;
+  border-bottom: 1px solid var(--line);
+}
+.svc-modal-title {
+  font-size: 1rem; font-weight: 600; color: var(--text);
+  letter-spacing: -0.02em; line-height: 1.2;
+}
+.svc-modal-sub {
+  font-size: 0.65rem; color: var(--text-faint);
+  letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.15rem;
+}
+.svc-modal-close {
+  margin-left: auto; background: none; border: none;
+  color: var(--text-dim); font-size: 0.9rem; cursor: pointer;
+  width: 28px; height: 28px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  transition: color 0.15s, background 0.15s;
+}
+.svc-modal-close:hover { color: var(--text); background: var(--bg-3); }
+
+.svc-modal-options { display: flex; flex-direction: column; gap: 0; }
+.svc-modal-opt {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1rem 1.2rem;
+  text-decoration: none; color: inherit;
+  border-bottom: 1px solid var(--line);
+  transition: background 0.18s;
+  position: relative;
+}
+.svc-modal-opt:last-child { border-bottom: none; }
+.svc-modal-opt:hover { background: var(--bg-2); }
+.svc-modal-opt svg:first-child { color: var(--cyan); flex-shrink: 0; }
+.svc-modal-opt-name {
+  font-size: 0.95rem; font-weight: 600; color: var(--text);
+  letter-spacing: -0.01em;
+}
+.svc-modal-opt:hover .svc-modal-opt-name { color: var(--cyan); }
+.svc-modal-opt-url {
+  font-size: 0.64rem; color: var(--text-faint);
+  margin-top: 0.15rem;
+}
+.svc-modal-arrow {
+  margin-left: auto; flex-shrink: 0;
+  width: 10px; height: 10px; color: var(--text-dim);
+  transition: transform 0.18s, color 0.18s;
+}
+.svc-modal-opt:hover .svc-modal-arrow { transform: translate(2px,-2px); color: var(--cyan); }
 
 /* ============================================================
    AI LAB
