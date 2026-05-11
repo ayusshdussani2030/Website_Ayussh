@@ -105,7 +105,7 @@ Modal CSS constraints:
 - **Never** use `backdrop-filter` on the modal backdrop — causes a Safari stacking context bug where the element paints above higher z-index siblings (e.g. the secret terminal at z-index 9000).
 - **Never** use `inset: 0` shorthand or `min()`/`max()` CSS functions — Cloudflare's CSS minifier can strip them; use explicit `top/right/bottom/left` and `width + max-width` instead.
 
-Current service count: **14** (Dashboard, Jellyfin, Jellyseerr, Prowlarr, Nginx Proxy Manager, qBittorrent, Radarr, Sonarr, VMware, WeTTY, Grafana, Safe, Speed Test, Status). Update `data-count` on `#hero .hs-num` and `.cta-stat-n`, the homelab panel `[ N ONLINE ]` label, and `.hl-svc-grid` entries whenever services are added or removed.
+Current service count: **15** (Dashboard, Jellyfin, Jellyseerr, Prowlarr, Nginx Proxy Manager, qBittorrent, Radarr, Sonarr, VMware, WeTTY, Grafana, Safe, Speed Test, Status, Nextcloud). Update `data-count` on `#hero .hs-num` and `.cta-stat-n`, the homelab panel `[ N ONLINE ]` label, and `.hl-svc-grid` entries whenever services are added or removed.
 
 ## Reduced-motion guard
 
